@@ -1,109 +1,124 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import Link from 'next/link';
-import { ArrowUpDown, Sparkles } from 'lucide-react';
 import { productsData } from '@/data/products';
-import { ProductCard } from '@/components/catalog/ProductCard';
+import { ProductGrid } from '@/components/catalog/ProductGrid';
+import { FilterSheet } from '@/components/catalog/FilterSheet';
+import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+
+const categories = [
+  { id: 'all', label: 'Tutti' },
+  { id: 'eeveelutions', label: 'Eeveelutions' },
+  { id: 'pokeballs', label: 'Poké Balls' },
+  { id: 'special-balls', label: 'Special Balls' },
+  { id: 'collectibles', label: 'Collectibles' },
+  { id: 'limited-editions', label: 'Limited Editions' },
+  { id: 'custom', label: 'Custom' },
+];
 
 export default function ShopPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [onlyInStock, setOnlyInStock] = useState<boolean>(false);
   const [sortBy, setSortBy] = useState<'featured' | 'price-asc' | 'price-desc' | 'rating'>('featured');
 
-  const categories = [
-    { id: 'all', label: 'Tutti i Prodotti' },
-    { id: 'eeveelutions', label: 'Eeveelutions' },
-    { id: 'pokeballs', label: 'Poké Balls' },
-    { id: 'special-balls', label: 'Special Balls' },
-    { id: 'collectibles', label: 'Collectibles' },
-    { id: 'custom', label: 'Custom' },
-    { id: 'limited-editions', label: 'Limited Drops' },
-  ];
-
   const filtered = useMemo(() => {
-    const list = selectedCategory === 'all'
-      ? [...productsData]
-      : productsData.filter((p) => p.category === selectedCategory);
+    let list =
+      selectedCategory === 'all'
+        ? [...productsData]
+        : productsData.filter((p) => p.category === selectedCategory);
+
+    if (onlyInStock) {
+      list = list.filter((p) => p.stockStatus === 'in_stock');
+    }
 
     if (sortBy === 'price-asc') list.sort((a, b) => a.price - b.price);
     if (sortBy === 'price-desc') list.sort((a, b) => b.price - a.price);
     if (sortBy === 'rating') list.sort((a, b) => b.rating - a.rating);
 
     return list;
-  }, [selectedCategory, sortBy]);
+  }, [selectedCategory, onlyInStock, sortBy]);
+
+  const handleReset = () => {
+    setSelectedCategory('all');
+    setOnlyInStock(false);
+    setSortBy('featured');
+  };
 
   return (
-    <div className="py-10 sm:py-16 bg-white min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10">
+    <div className="py-10 sm:py-14 bg-white min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         {/* Page Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-zinc-200">
-          <div>
-            <span className="text-[11px] font-mono tracking-widest uppercase text-zinc-400 block mb-1">
-              POKE3D / SHOP
-            </span>
-            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-zinc-950">
-              SHOP
-            </h1>
-            <p className="text-sm text-zinc-500 mt-2 max-w-xl">
-              Repliche artigianali in scala 1:1, vani sagomati per giochi Nintendo Switch, sculture desk e drop a tiratura limitata.
-            </p>
-          </div>
-
-          <Link
-            href="/pokemon"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-600 hover:text-black transition-colors self-start md:self-auto"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <span>Cerca per Pokémon &rarr;</span>
-          </Link>
+        <div className="pb-6 border-b border-zinc-200">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-zinc-950">
+            Shop
+          </h1>
+          <p className="text-sm text-zinc-500 mt-1.5 max-w-xl">
+            Sfere da collezione stampate in 3D in scala 1:1, serie completa Eeveelutions, vani porta-cartucce Nintendo Switch ed edizioni numerate.
+          </p>
         </div>
 
-        {/* Filter | Sort Bar */}
+        {/* Toolbar: Category Buttons, FilterSheet & Sort Select */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          {/* Category Tabs */}
-          <div className="flex items-center gap-1 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
-            {categories.map((cat) => {
-              const isActive = selectedCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-medium tracking-wide transition-colors whitespace-nowrap cursor-pointer ${
-                    isActive
-                      ? 'bg-zinc-950 text-white font-semibold'
-                      : 'text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100'
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              );
-            })}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
+            {categories.map((cat) => (
+              <Button
+                key={cat.id}
+                type="button"
+                variant={selectedCategory === cat.id ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setSelectedCategory(cat.id)}
+              >
+                {cat.label}
+              </Button>
+            ))}
           </div>
 
-          {/* Sort Selector */}
           <div className="flex items-center gap-2 self-end md:self-auto shrink-0">
-            <span className="text-xs text-zinc-400 flex items-center gap-1">
-              <ArrowUpDown className="w-3 h-3" /> Ordina:
-            </span>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as 'featured' | 'price-asc' | 'price-desc' | 'rating')}
-              className="bg-transparent text-xs font-semibold text-zinc-800 focus:outline-none cursor-pointer py-1 pr-2"
-            >
-              <option value="featured">In evidenza</option>
-              <option value="price-asc">Prezzo: Minore &rarr; Maggiore</option>
-              <option value="price-desc">Prezzo: Maggiore &rarr; Minore</option>
-              <option value="rating">Voto recensioni</option>
-            </select>
+            <FilterSheet
+              categories={categories}
+              selectedCategory={selectedCategory}
+              onSelectCategory={setSelectedCategory}
+              onlyInStock={onlyInStock}
+              onToggleInStock={setOnlyInStock}
+              onReset={handleReset}
+              totalResults={filtered.length}
+            />
+
+            <div className="w-48">
+              <Select
+                value={sortBy}
+                onValueChange={(val) =>
+                  setSortBy(val as 'featured' | 'price-asc' | 'price-desc' | 'rating')
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Ordina per" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="featured">In evidenza</SelectItem>
+                  <SelectItem value="price-asc">Prezzo: crescente</SelectItem>
+                  <SelectItem value="price-desc">Prezzo: decrescente</SelectItem>
+                  <SelectItem value="rating">Più apprezzati</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
+        </div>
+
+        {/* Results Count */}
+        <div className="text-xs text-zinc-500">
+          {filtered.length} {filtered.length === 1 ? 'prodotto' : 'prodotti'}
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-10">
-          {filtered.map((prod) => (
-            <ProductCard key={prod.id} product={prod} />
-          ))}
-        </div>
+        <ProductGrid products={filtered} columns={4} />
       </div>
     </div>
   );

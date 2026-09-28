@@ -5,7 +5,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { WishlistDrawer } from '@/components/wishlist/WishlistDrawer';
-import { SearchModal } from '@/components/search/SearchModal';
+import { SearchCommand } from '@/components/search/SearchCommand';
 import { CheckoutModal } from '@/components/checkout/CheckoutModal';
 import { ProductModal } from '@/components/configurator/ProductModal';
 import { NFCScanModal } from '@/components/collection/NFCScanModal';
@@ -18,39 +18,23 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
     activeProductModal,
     closeProductModal,
     openProductModal,
-    isSearchOpen,
-    closeSearch,
     isCheckoutOpen,
     openCheckout,
     closeCheckout,
   } = useUI();
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFAFA] text-slate-900 selection:bg-red-600 selection:text-white">
-      {/* Global Navbar */}
+    <div className="min-h-screen flex flex-col bg-white text-zinc-950 selection:bg-zinc-950 selection:text-white">
       <Navbar />
-
-      {/* Main Content View */}
       <main className="flex-1">{children}</main>
-
-      {/* Global Footer */}
       <Footer />
 
-      {/* Global Modals & Drawers */}
       <CartDrawer onProceedToCheckout={openCheckout} />
       <WishlistDrawer
         products={productsData}
         onOpenProductModal={openProductModal}
       />
-      <SearchModal
-        isOpen={isSearchOpen}
-        onClose={closeSearch}
-        products={productsData}
-        onSelectProduct={(prod) => {
-          closeSearch();
-          openProductModal(prod);
-        }}
-      />
+      <SearchCommand />
       <CheckoutModal isOpen={isCheckoutOpen} onClose={closeCheckout} />
       <ProductModal product={activeProductModal} onClose={closeProductModal} />
       <NFCScanModal />

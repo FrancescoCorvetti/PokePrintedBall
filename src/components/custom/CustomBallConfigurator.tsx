@@ -2,36 +2,46 @@
 
 import React, { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Sliders, Check, ShoppingBag } from 'lucide-react';
+import { Check, ShoppingBag } from 'lucide-react';
 import { StudioPokeballGraphic } from '@/components/ui/StudioPokeballGraphic';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useCart } from '@/context/CartContext';
-import { Product, ProductSupportOption, ProductFinishOption } from '@/types/product';
+import { Product } from '@/types/product';
 import { standardSupports, standardFinishes } from '@/data/products';
 import { pokemonData } from '@/data/pokemon';
 
 const TOP_COLORS = [
-  { name: 'Crimson Red', hex: '#DC2626' },
-  { name: 'Stealth Black', hex: '#18181B' },
-  { name: 'Imperial Violet', hex: '#7E22CE' },
-  { name: 'Cobalt Blue', hex: '#2563EB' },
-  { name: 'Emerald Forest', hex: '#059669' },
-  { name: 'Cyber 24K Gold', hex: '#EAB308' },
-  { name: 'Cyber Cyan', hex: '#0284C7' },
-  { name: 'Alabaster White', hex: '#F8FAFC' },
+  { name: 'Rosso Classico', hex: '#DC2626' },
+  { name: 'Nero Opaco', hex: '#18181B' },
+  { name: 'Viola Imperiale', hex: '#7E22CE' },
+  { name: 'Blu Cobalto', hex: '#2563EB' },
+  { name: 'Verde Smeraldo', hex: '#059669' },
+  { name: 'Giallo Solare', hex: '#EAB308' },
+  { name: 'Azzurro Ciano', hex: '#0284C7' },
+  { name: 'Bianco Perla', hex: '#F8FAFC' },
 ];
 
 const BOTTOM_COLORS = [
-  { name: 'Pure White Satin', hex: '#F8FAFC' },
-  { name: 'Onyx Black Matte', hex: '#18181B' },
-  { name: 'Cement Gray', hex: '#94A3B8' },
-  { name: 'Raw Slate', hex: '#334155' },
+  { name: 'Bianco Satinato', hex: '#F8FAFC' },
+  { name: 'Nero Opaco', hex: '#18181B' },
+  { name: 'Grigio Titanio', hex: '#94A3B8' },
+  { name: 'Antracite Scuro', hex: '#334155' },
 ];
 
 const RING_STYLES = [
-  { name: 'Onyx Dark Slate', hex: '#0F172A', label: 'Dark Latch' },
-  { name: 'Metallic Chrome', hex: '#64748B', label: 'Silver Bezel' },
-  { name: '24K Gold Plated', hex: '#CA8A04', label: 'Gold Core' },
-  { name: 'Crimson Ruby', hex: '#E11D48', label: 'Red Ring' },
+  { name: 'Nero Antracite', hex: '#0F172A' },
+  { name: 'Grigio Metallizzato', hex: '#64748B' },
+  { name: 'Oro Silk', hex: '#CA8A04' },
+  { name: 'Rosso Rubino', hex: '#E11D48' },
 ];
 
 export const CustomBallConfigurator: React.FC = () => {
@@ -70,55 +80,57 @@ export const CustomBallConfigurator: React.FC = () => {
   const [topColor, setTopColor] = useState(initialTop);
   const [bottomColor, setBottomColor] = useState(initialBottom);
   const [ringStyle, setRingStyle] = useState(RING_STYLES[0]);
-  const [customTrainerName, setCustomTrainerName] = useState(trainerParam ? trainerParam.toUpperCase() : '');
-  const [selectedSupport, setSelectedSupport] = useState<ProductSupportOption>(standardSupports[1]);
-  const [selectedFinish, setSelectedFinish] = useState<ProductFinishOption>(standardFinishes[0]);
+  const [customTrainerName, setCustomTrainerName] = useState(
+    trainerParam ? trainerParam.toUpperCase() : ''
+  );
+  const [selectedSupportId, setSelectedSupportId] = useState(standardSupports[1].id);
+  const [selectedFinishId, setSelectedFinishId] = useState(standardFinishes[0].id);
   const [added, setAdded] = useState(false);
 
-  // Base price for custom unit
-  const basePrice = 19.90;
+  const selectedSupport =
+    standardSupports.find((s) => s.id === selectedSupportId) || standardSupports[0];
+  const selectedFinish =
+    standardFinishes.find((f) => f.id === selectedFinishId) || standardFinishes[0];
+
+  const basePrice = 19.9;
   const totalPrice = Math.round((basePrice + selectedSupport.price) * 100) / 100;
 
   const handleCreateAndAddToCart = () => {
     const customProduct: Product = {
       id: `custom-ball-${Date.now()}`,
-      slug: 'custom-ball-order',
-      name: `Custom Lab Ball (${topColor.name} / ${bottomColor.name})`,
-      subtitle: `Sfera su misura: Top ${topColor.name}, Base ${bottomColor.name}, Ghiera ${ringStyle.name}`,
+      slug: 'studio-custom-ball',
+      name: `Poké Ball Custom (${topColor.name} / ${bottomColor.name})`,
+      subtitle: `Calotta ${topColor.name}, Base ${bottomColor.name}, Anello ${ringStyle.name}`,
       price: basePrice,
       category: 'custom',
       categoryLabel: 'CUSTOM',
       ballType: 'custom',
       stockStatus: 'made_to_order',
       leadTimeDays: 2,
-      badge: 'CUSTOM STUDIO LAB',
+      badge: 'CUSTOM',
       rating: 5.0,
       reviewsCount: 1,
-      description: 'Pezzo unico configurato su misura attraverso il laboratorio online POKE3D.',
-      longDescription: `Configurazione personalizzata: Calotta superiore ${topColor.name} (${topColor.hex}), Calotta inferiore ${bottomColor.name} (${bottomColor.hex}), Anello centrale ${ringStyle.name} (${ringStyle.hex}).`,
+      description: 'Poké Ball stampata in 3D su ordinazione con combinazione colori personalizzata.',
+      longDescription: `Calotta superiore ${topColor.name}, calotta inferiore ${bottomColor.name}, anello centrale ${ringStyle.name}.`,
       features: [
         `Calotta Superiore: ${topColor.name}`,
         `Calotta Inferiore: ${bottomColor.name}`,
-        `Meccanismo & Anello: ${ringStyle.name}`,
-        customTrainerName.trim() ? `Incisione Targa: "${customTrainerName.trim().toUpperCase()}"` : 'Senza incisione',
-        'Stampa calibrata su ordinazione con collaudo tolleranze 0.16mm'
+        `Anello Centrale: ${ringStyle.name}`,
+        customTrainerName.trim()
+          ? `Incisione: "${customTrainerName.trim()}"`
+          : 'Senza incisione',
       ],
       specs: {
         diameter: '100 mm (Scala 1:1)',
-        material: 'PLA+ Bio polimerizzato custom',
+        material: 'PLA+ Bio',
         weight: '110 g',
         printTime: '5h 15min',
         magnets: '4x Magneti N52 neodimio',
         finishType: selectedFinish.name,
         layerHeight: '0.16 mm',
-        tolerances: '±0.1 mm'
+        tolerances: '±0.1 mm',
       },
-      galleryAngles: [
-        { id: 'front', label: 'Custom Front', desc: 'Anteprima della tua palette colori', viewMode: 'front' },
-        { id: 'macro', label: 'Layer Detail', desc: 'Dettaglio macro dei layer', viewMode: 'macro' },
-        { id: 'open', label: 'Meccanismo', desc: 'Interno magnetico', viewMode: 'open' },
-        { id: 'stand', label: 'Stand', desc: 'Espositore con targa incisa', viewMode: 'stand' }
-      ],
+      galleryAngles: [],
       availableSupports: standardSupports,
       availableFinishes: standardFinishes,
       allowCustomEngraving: true,
@@ -127,8 +139,8 @@ export const CustomBallConfigurator: React.FC = () => {
         topColor: topColor.hex,
         bottomColor: bottomColor.hex,
         ringColor: ringStyle.hex,
-        buttonColor: '#FFFFFF'
-      }
+        buttonColor: '#FFFFFF',
+      },
     };
 
     addItem(
@@ -142,8 +154,8 @@ export const CustomBallConfigurator: React.FC = () => {
           bottomColor: bottomColor.hex,
           ringColor: ringStyle.hex,
           buttonColor: '#FFFFFF',
-          name: `${topColor.name} & ${bottomColor.name}`
-        }
+          name: `${topColor.name} & ${bottomColor.name}`,
+        },
       },
       1
     );
@@ -152,289 +164,235 @@ export const CustomBallConfigurator: React.FC = () => {
     setTimeout(() => {
       setAdded(false);
       openCart();
-    }, 600);
+    }, 400);
   };
 
   return (
-    <section id="custom" className="py-16 sm:py-24 bg-white border-b border-zinc-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 border border-zinc-200 text-xs font-mono font-medium uppercase tracking-widest text-zinc-700">
-            <Sliders className="w-3.5 h-3.5 text-zinc-900" />
-            <span>BESPOKE LAB &bull; SCALE 1:1</span>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      <div className="pb-6 border-b border-zinc-200">
+        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-zinc-950">
+          Configuratore Poké Ball Custom
+        </h1>
+        <p className="text-sm text-zinc-500 mt-1.5 max-w-xl">
+          Scegli la combinazione di filamenti PLA+, la finitura e il supporto espositivo. Stampata su ordinazione in 48 ore.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        {/* Left: Product Preview */}
+        <div className="lg:col-span-6 space-y-3">
+          <div className="aspect-square w-full overflow-hidden rounded-lg bg-zinc-100 border border-zinc-200">
+            <StudioPokeballGraphic
+              type="custom"
+              customColors={{
+                topColor: topColor.hex,
+                bottomColor: bottomColor.hex,
+                ringColor: ringStyle.hex,
+                buttonColor: '#FFFFFF',
+              }}
+              fill
+            />
           </div>
-          <h2 className="font-pokemon text-3xl sm:text-5xl font-normal text-zinc-950 tracking-wider">
-            CREATE YOUR OWN
-          </h2>
-          <p className="text-base text-zinc-500 max-w-lg mx-auto leading-relaxed">
-            Combina filamenti industriali FDM, seleziona la finitura e incidi la targa espositore. Prototipazione e stampa su misura in 48 ore.
-          </p>
+
+          <div className="grid grid-cols-3 gap-3 text-xs text-zinc-600">
+            <div className="p-3 rounded-md border border-zinc-200 bg-zinc-50">
+              <span className="text-zinc-400 block">Calotta Superiore</span>
+              <span className="font-medium text-zinc-950">{topColor.name}</span>
+            </div>
+            <div className="p-3 rounded-md border border-zinc-200 bg-zinc-50">
+              <span className="text-zinc-400 block">Calotta Inferiore</span>
+              <span className="font-medium text-zinc-950">{bottomColor.name}</span>
+            </div>
+            <div className="p-3 rounded-md border border-zinc-200 bg-zinc-50">
+              <span className="text-zinc-400 block">Anello Centrale</span>
+              <span className="font-medium text-zinc-950">{ringStyle.name}</span>
+            </div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-          {/* Left: Interactive Real-Time Preview */}
-          <div className="lg:col-span-6 lg:sticky lg:top-24 flex flex-col items-center justify-center p-6 sm:p-8 rounded-2xl bg-[#F6F6F6] border border-zinc-200 relative overflow-hidden">
-            {/* Technical Watermark */}
-            <div className="w-full flex items-center justify-between text-[10px] font-mono tracking-widest text-zinc-500 uppercase mb-3">
-              <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span>LIVE STUDIO PREVIEW</span>
-              </div>
-              <span>0.16MM &bull; N52 MAGNETS</span>
+        {/* Right: Configuration Form */}
+        <div className="lg:col-span-6 space-y-6">
+          {/* 1. Top Shell */}
+          <div className="space-y-2.5">
+            <div className="flex justify-between text-xs">
+              <span className="font-medium text-zinc-700">1. Calotta Superiore</span>
+              <span className="text-zinc-500">{topColor.name}</span>
             </div>
-
-            <div className="w-full aspect-square rounded-2xl overflow-hidden shadow-md bg-zinc-950 mb-4">
-              <StudioPokeballGraphic
-                type="custom"
-                customColors={{
-                  topColor: topColor.hex,
-                  bottomColor: bottomColor.hex,
-                  ringColor: ringStyle.hex,
-                  buttonColor: '#FFFFFF'
-                }}
-                fill
-              />
-            </div>
-
-            {/* Live Engraved Plaque Simulator */}
-            {customTrainerName.trim() ? (
-              <div className="mt-2 px-5 py-2 rounded bg-zinc-950 text-amber-200/90 border border-zinc-800 font-mono text-xs uppercase tracking-widest shadow-sm flex items-center gap-2">
-                <span className="text-zinc-500 text-[10px]">EDITION:</span>
-                <span className="font-bold">&ldquo;{customTrainerName.trim()}&rdquo;</span>
-              </div>
-            ) : (
-              <div className="mt-2 text-[11px] font-mono text-zinc-400">
-                TARGA INCISA NON CONFIGURATA
-              </div>
-            )}
-
-            {/* Selected Spec Labels */}
-            <div className="mt-8 pt-6 border-t border-zinc-200/80 w-full grid grid-cols-3 gap-2 text-center text-xs">
-              <div className="p-2 rounded-lg bg-white border border-zinc-200/60">
-                <span className="block text-[10px] uppercase font-mono text-zinc-400">Top Shell</span>
-                <span className="font-bold text-zinc-900 truncate block">{topColor.name}</span>
-              </div>
-              <div className="p-2 rounded-lg bg-white border border-zinc-200/60">
-                <span className="block text-[10px] uppercase font-mono text-zinc-400">Base</span>
-                <span className="font-bold text-zinc-900 truncate block">{bottomColor.name}</span>
-              </div>
-              <div className="p-2 rounded-lg bg-white border border-zinc-200/60">
-                <span className="block text-[10px] uppercase font-mono text-zinc-400">Bezel</span>
-                <span className="font-bold text-zinc-900 truncate block">{ringStyle.label}</span>
-              </div>
+            <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
+              {TOP_COLORS.map((col) => {
+                const isSelected = topColor.name === col.name;
+                return (
+                  <button
+                    key={col.name}
+                    type="button"
+                    onClick={() => setTopColor(col)}
+                    className={`h-10 rounded-md border flex items-center justify-center transition-all cursor-pointer ${
+                      isSelected
+                        ? 'ring-2 ring-zinc-950 ring-offset-2 border-transparent'
+                        : 'border-zinc-200 hover:border-zinc-400'
+                    }`}
+                    style={{ backgroundColor: col.hex }}
+                    title={col.name}
+                  >
+                    {isSelected && (
+                      <Check
+                        className={`h-4 w-4 ${
+                          col.hex === '#F8FAFC' ? 'text-zinc-900' : 'text-white'
+                        }`}
+                      />
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          {/* Right: Customization Controls */}
-          <div className="lg:col-span-6 space-y-7">
-            {/* Step 1: Top Shell Color */}
-            <div className="space-y-3">
-              <label className="text-xs font-mono uppercase tracking-wider text-zinc-500 flex justify-between">
-                <span>01 // TOP SHELL FILAMENT</span>
-                <span className="text-zinc-950 font-sans font-bold">{topColor.name}</span>
-              </label>
-              <div className="grid grid-cols-4 sm:grid-cols-8 gap-2.5">
-                {TOP_COLORS.map((col) => {
-                  const isSelected = topColor.name === col.name;
-                  return (
-                    <button
-                      key={col.name}
-                      type="button"
-                      onClick={() => setTopColor(col)}
-                      className={`h-11 rounded-xl border flex items-center justify-center transition-all cursor-pointer relative ${
-                        isSelected
-                          ? 'ring-2 ring-zinc-950 ring-offset-2 border-transparent scale-105'
-                          : 'border-zinc-200 hover:border-zinc-400'
-                      }`}
+          {/* 2. Bottom Shell */}
+          <div className="space-y-2.5">
+            <div className="flex justify-between text-xs">
+              <span className="font-medium text-zinc-700">2. Calotta Inferiore</span>
+              <span className="text-zinc-500">{bottomColor.name}</span>
+            </div>
+            <div className="grid grid-cols-4 gap-2">
+              {BOTTOM_COLORS.map((col) => {
+                const isSelected = bottomColor.name === col.name;
+                return (
+                  <button
+                    key={col.name}
+                    type="button"
+                    onClick={() => setBottomColor(col)}
+                    className={`px-3 py-2 rounded-md border text-xs font-medium flex items-center gap-2 transition-colors cursor-pointer ${
+                      isSelected
+                        ? 'border-zinc-950 bg-zinc-950 text-white'
+                        : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'
+                    }`}
+                  >
+                    <span
+                      className="h-3.5 w-3.5 rounded-full border border-zinc-300 shrink-0"
                       style={{ backgroundColor: col.hex }}
-                      title={col.name}
-                    >
-                      {isSelected && (
-                        <Check className={`w-4 h-4 ${col.hex === '#F8FAFC' ? 'text-zinc-900' : 'text-white'}`} />
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
+                    />
+                    <span className="truncate">{col.name}</span>
+                  </button>
+                );
+              })}
             </div>
+          </div>
 
-            {/* Step 2: Bottom Shell Color */}
-            <div className="space-y-3">
-              <label className="text-xs font-mono uppercase tracking-wider text-zinc-500 flex justify-between">
-                <span>02 // BASE SHELL FILAMENT</span>
-                <span className="text-zinc-950 font-sans font-bold">{bottomColor.name}</span>
+          {/* 3. Ring Style */}
+          <div className="space-y-2.5">
+            <div className="flex justify-between text-xs">
+              <span className="font-medium text-zinc-700">3. Anello Centrale</span>
+              <span className="text-zinc-500">{ringStyle.name}</span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {RING_STYLES.map((ring) => {
+                const isSelected = ringStyle.name === ring.name;
+                return (
+                  <button
+                    key={ring.name}
+                    type="button"
+                    onClick={() => setRingStyle(ring)}
+                    className={`px-3 py-2 rounded-md border text-xs font-medium flex items-center gap-2 transition-colors cursor-pointer ${
+                      isSelected
+                        ? 'border-zinc-950 bg-zinc-950 text-white'
+                        : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'
+                    }`}
+                  >
+                    <span
+                      className="h-3.5 w-3.5 rounded-full border border-zinc-300 shrink-0"
+                      style={{ backgroundColor: ring.hex }}
+                    />
+                    <span className="truncate">{ring.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* 4. Support & Finish Selects */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-zinc-700 block">
+                Supporto Espositivo
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                {BOTTOM_COLORS.map((col) => {
-                  const isSelected = bottomColor.name === col.name;
-                  return (
-                    <button
-                      key={col.name}
-                      type="button"
-                      onClick={() => setBottomColor(col)}
-                      className={`p-3 rounded-xl border flex items-center gap-2.5 transition-all cursor-pointer ${
-                        isSelected
-                          ? 'border-zinc-950 bg-zinc-950 text-white font-medium shadow-xs'
-                          : 'border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300'
-                      }`}
-                    >
-                      <span
-                        className="w-4 h-4 rounded-full border border-black/20 shrink-0"
-                        style={{ backgroundColor: col.hex }}
-                      />
-                      <span className="text-xs truncate">{col.name}</span>
-                    </button>
-                  );
-                })}
-              </div>
+              <Select value={selectedSupportId} onValueChange={setSelectedSupportId}>
+                <SelectTrigger className="h-10 text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {standardSupports.map((sup) => (
+                    <SelectItem key={sup.id} value={sup.id} className="text-sm">
+                      {sup.name} {sup.price > 0 ? `(+${sup.price.toFixed(2)}€)` : '(0€)'}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
-            {/* Step 3: Ring & Latch Style */}
-            <div className="space-y-3">
-              <label className="text-xs font-mono uppercase tracking-wider text-zinc-500 flex justify-between">
-                <span>03 // CORE BEZEL & LATCH</span>
-                <span className="text-zinc-950 font-sans font-bold">{ringStyle.label}</span>
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-zinc-700 block">
+                Finitura
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {RING_STYLES.map((r) => {
-                  const isSelected = ringStyle.name === r.name;
-                  return (
-                    <button
-                      key={r.name}
-                      type="button"
-                      onClick={() => setRingStyle(r)}
-                      className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${
-                        isSelected
-                          ? 'border-zinc-950 bg-zinc-950 text-white font-medium shadow-xs'
-                          : 'border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300'
-                      }`}
-                    >
-                      <span className="text-xs block">{r.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
+              <Select value={selectedFinishId} onValueChange={setSelectedFinishId}>
+                <SelectTrigger className="h-10 text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {standardFinishes.map((fin) => (
+                    <SelectItem key={fin.id} value={fin.id} className="text-sm">
+                      {fin.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
+          </div>
 
-            {/* Step 4: Stand Support */}
-            <div className="space-y-3">
-              <label className="text-xs font-mono uppercase tracking-wider text-zinc-500 flex justify-between">
-                <span>04 // DISPLAY PEDESTAL</span>
-                <span className="text-zinc-950 font-sans font-bold">{selectedSupport.name}</span>
+          {/* 5. Engraving */}
+          <div className="space-y-1.5">
+            <div className="flex justify-between text-xs">
+              <label className="font-medium text-zinc-700">
+                Incisione su targhetta (Opzionale, inclusa)
               </label>
-              <div className="grid grid-cols-2 gap-2.5">
-                {standardSupports.slice(0, 2).map((s) => {
-                  const isSelected = selectedSupport.id === s.id;
-                  return (
-                    <button
-                      key={s.id}
-                      type="button"
-                      onClick={() => setSelectedSupport(s)}
-                      className={`p-3 rounded-xl border text-left text-xs transition-all cursor-pointer ${
-                        isSelected
-                          ? 'border-zinc-950 bg-zinc-950 text-white font-medium shadow-xs'
-                          : 'border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300'
-                      }`}
-                    >
-                      <span className="block truncate font-medium">{s.name}</span>
-                      <span className={`text-[10px] block mt-0.5 ${isSelected ? 'text-zinc-300' : 'text-zinc-400'}`}>
-                        {s.price > 0 ? `+${s.price.toFixed(2)}€` : 'Incluso'}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
+              <span className="text-zinc-400">{customTrainerName.length}/20</span>
+            </div>
+            <Input
+              value={customTrainerName}
+              onChange={(e) => setCustomTrainerName(e.target.value.slice(0, 20))}
+              placeholder="Es. ALEX, RED 96..."
+              maxLength={20}
+            />
+          </div>
+
+          <Separator />
+
+          {/* Total & CTA */}
+          <div className="flex items-center justify-between pt-1">
+            <div>
+              <span className="text-xs text-zinc-500 block">Totale Configurazione</span>
+              <span className="text-2xl font-semibold text-zinc-950">
+                {totalPrice.toFixed(2)}€
+              </span>
             </div>
 
-            {/* Step 5: Finitura */}
-            <div className="space-y-3">
-              <label className="text-xs font-mono uppercase tracking-wider text-zinc-500 flex justify-between">
-                <span>05 // SURFACE TREATMENT</span>
-                <span className="text-zinc-950 font-sans font-bold">{selectedFinish.name}</span>
-              </label>
-              <div className="grid grid-cols-2 gap-2.5">
-                {standardFinishes.map((f) => {
-                  const isSelected = selectedFinish.id === f.id;
-                  return (
-                    <button
-                      key={f.id}
-                      type="button"
-                      onClick={() => setSelectedFinish(f)}
-                      className={`p-3 rounded-xl border text-left text-xs transition-all cursor-pointer ${
-                        isSelected
-                          ? 'border-zinc-950 bg-zinc-950 text-white font-medium shadow-xs'
-                          : 'border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300'
-                      }`}
-                    >
-                      <span className="block truncate font-medium">{f.name}</span>
-                      <span className={`text-[10px] block mt-0.5 ${isSelected ? 'text-zinc-300' : 'text-zinc-400'}`}>
-                        0.16mm FDM
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Step 6: Custom Engraving */}
-            <div className="space-y-2 pt-2 border-t border-zinc-100">
-              <div className="flex justify-between items-center text-xs">
-                <label htmlFor="custom-name-input" className="font-mono uppercase tracking-wider text-zinc-500">
-                  06 // LASER ENGRAVED PLAQUE
-                </label>
-                <span className="text-zinc-950 font-mono text-[11px] font-bold">COMPLIMENTARY</span>
-              </div>
-              <input
-                id="custom-name-input"
-                type="text"
-                maxLength={20}
-                value={customTrainerName}
-                onChange={(e) => setCustomTrainerName(e.target.value)}
-                placeholder="es. RED #001 / TRAINER NAME..."
-                className="w-full px-4 py-3 rounded-xl bg-[#F6F6F6] border border-zinc-200 focus:border-zinc-950 focus:bg-white focus:outline-none text-sm font-mono text-zinc-900 placeholder-zinc-400 transition-all uppercase"
-              />
-            </div>
-
-            {/* Action Bar: Price & CTA */}
-            <div className="pt-6 border-t border-zinc-200 flex flex-col sm:flex-row items-center justify-between gap-5">
-              <div>
-                <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 block">Total Bespoke Piece</span>
-                <div className="flex items-baseline gap-2.5">
-                  <span className="text-3xl font-black text-zinc-950">
-                    {totalPrice.toFixed(2)}€
-                  </span>
-                  <span className="text-xs text-zinc-500 font-medium">
-                    Spedizione tracciata inclusa
-                  </span>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleCreateAndAddToCart}
-                className={`w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2.5 cursor-pointer ${
-                  added
-                    ? 'bg-emerald-600 text-white'
-                    : 'bg-zinc-950 hover:bg-black text-white hover:scale-[1.01]'
-                }`}
-              >
-                {added ? (
-                  <>
-                    <Check className="w-4 h-4" />
-                    <span>Aggiunta al Carrello!</span>
-                  </>
-                ) : (
-                  <>
-                    <ShoppingBag className="w-4 h-4" />
-                    <span>COMMISSION WORKPIECE</span>
-                  </>
-                )}
-              </button>
-            </div>
+            <Button size="lg" onClick={handleCreateAndAddToCart}>
+              {added ? (
+                <>
+                  <Check className="h-4 w-4" />
+                  <span>Aggiunta al Carrello</span>
+                </>
+              ) : (
+                <>
+                  <ShoppingBag className="h-4 w-4" />
+                  <span>Aggiungi al Carrello</span>
+                </>
+              )}
+            </Button>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };

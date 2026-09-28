@@ -1,7 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Mail, MessageCircle, Clock, MapPin, Send, CheckCircle2 } from 'lucide-react';
+import { Check } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -19,183 +28,145 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="py-12 sm:py-20 bg-[#FAFAFA] min-h-screen">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-700 text-xs font-mono font-medium uppercase tracking-widest">
-            <Mail className="w-3.5 h-3.5 text-zinc-900" />
-            <span>STUDIO LAB CONCIERGE</span>
-          </div>
-
-          <h1 className="font-pokemon text-3xl sm:text-5xl font-normal text-zinc-950 tracking-wider">
-            GET IN TOUCH
+    <div className="py-10 sm:py-14 bg-white min-h-screen">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        <div className="pb-6 border-b border-zinc-200 space-y-1.5">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-zinc-950">
+            Contatti
           </h1>
-
-          <p className="text-sm sm:text-base text-zinc-500">
-            Hai domande sui nostri collectible 3D, su una commissione speciale o sullo stato di un ordine? Siamo qui per aiutarti.
+          <p className="text-sm text-zinc-500">
+            Scrivici per richieste personalizzate, informazioni sugli ordini o domande sui modelli stampati in 3D.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Column: Direct Info Cards */}
-          <div className="lg:col-span-5 space-y-4">
-            <div className="bg-white rounded-2xl border border-zinc-200 p-6 sm:p-8 space-y-6">
-              <h3 className="font-pokemon text-xl font-normal text-zinc-900 tracking-wide">
-                CONTATTO DIRETTO
-              </h3>
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
+          {/* Contact Info */}
+          <div className="md:col-span-5 space-y-6 text-sm">
+            <div>
+              <h2 className="font-semibold text-zinc-950">Email</h2>
+              <p className="text-zinc-600 mt-1">info@poke3d.it</p>
+            </div>
 
-              <div className="space-y-3 text-xs sm:text-sm">
-                <a
-                  href="https://wa.me/?text=Ciao!%20Vorrei%20informazioni%20sui%20collectible%20POKE3D"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-start gap-3.5 p-4 rounded-xl bg-[#F6F6F6] border border-zinc-200 text-zinc-900 hover:border-zinc-400 transition-colors"
-                >
-                  <MessageCircle className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                  <div>
-                    <h5 className="font-bold">WhatsApp Rapido</h5>
-                    <p className="text-xs text-zinc-500 mt-0.5">
-                      Risposta in meno di 2 ore. Ideale per richieste custom e foto prototipi.
-                    </p>
-                  </div>
-                </a>
+            <div>
+              <h2 className="font-semibold text-zinc-950">Orari Laboratorio</h2>
+              <p className="text-zinc-600 mt-1">Lun &ndash; Ven: 09:00 &ndash; 19:00</p>
+            </div>
 
-                <div className="flex items-start gap-3.5 p-4 rounded-xl bg-[#F6F6F6] border border-zinc-200/60 text-zinc-900">
-                  <Mail className="w-5 h-5 text-zinc-700 shrink-0 mt-0.5" />
-                  <div>
-                    <h5 className="font-bold">Email Ufficiale</h5>
-                    <p className="text-xs text-zinc-500 mt-0.5">
-                      info@poke3d.it &bull; ordini@poke3d.it
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3.5 p-4 rounded-xl bg-[#F6F6F6] border border-zinc-200/60 text-zinc-900">
-                  <Clock className="w-5 h-5 text-zinc-700 shrink-0 mt-0.5" />
-                  <div>
-                    <h5 className="font-bold">Orari Laboratorio Stampa</h5>
-                    <p className="text-xs text-zinc-500 mt-0.5 font-mono">
-                      Lun - Ven: 09:00 - 19:00 &bull; Sab: 09:00 - 13:00
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3.5 p-4 rounded-xl bg-[#F6F6F6] border border-zinc-200/60 text-zinc-900">
-                  <MapPin className="w-5 h-5 text-zinc-700 shrink-0 mt-0.5" />
-                  <div>
-                    <h5 className="font-bold">Origine Manifattura</h5>
-                    <p className="text-xs text-zinc-500 mt-0.5">
-                      100% Progettato, Stampato e Rifinito a mano in Italia.
-                    </p>
-                  </div>
-                </div>
-              </div>
+            <div>
+              <h2 className="font-semibold text-zinc-950">Spedizioni</h2>
+              <p className="text-zinc-600 mt-1">
+                Corriere espresso tracciato 24/48h in tutta Italia. Gratuita sopra i 40€.
+              </p>
             </div>
           </div>
 
-          {/* Right Column: Interactive Contact Form */}
-          <div className="lg:col-span-7 bg-white rounded-2xl border border-zinc-200 p-6 sm:p-10">
+          {/* Contact Form */}
+          <div className="md:col-span-7">
             {submitted ? (
-              <div className="text-center py-12 space-y-4 animate-in fade-in">
-                <div className="w-14 h-14 rounded-full bg-zinc-100 text-zinc-900 border border-zinc-200 flex items-center justify-center mx-auto">
-                  <CheckCircle2 className="w-7 h-7" />
+              <div className="rounded-lg border border-zinc-200 p-8 text-center space-y-3">
+                <div className="h-10 w-10 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center mx-auto">
+                  <Check className="h-5 w-5" />
                 </div>
-                <h3 className="font-pokemon text-2xl font-normal text-zinc-950 tracking-wide">
-                  MESSAGGIO RICEVUTO!
+                <h3 className="text-base font-semibold text-zinc-950">
+                  Messaggio inviato
                 </h3>
-                <p className="text-sm text-zinc-500 max-w-md mx-auto">
-                  Grazie {formData.name}, abbiamo preso in carico la tua richiesta. Ti risponderemo all&apos;indirizzo <strong className="text-zinc-900">{formData.email}</strong> entro poche ore.
+                <p className="text-xs text-zinc-500 max-w-sm mx-auto">
+                  Grazie {formData.name}, ti risponderemo all&apos;indirizzo {formData.email} il prima possibile.
                 </p>
-                <button
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => {
                     setSubmitted(false);
-                    setFormData({ name: '', email: '', subject: 'custom_order', message: '' });
+                    setFormData({
+                      name: '',
+                      email: '',
+                      subject: 'custom_order',
+                      message: '',
+                    });
                   }}
-                  className="px-6 py-2.5 rounded-xl bg-zinc-950 text-white text-xs font-mono uppercase tracking-widest hover:bg-black transition-colors cursor-pointer"
                 >
                   Invia un altro messaggio
-                </button>
+                </Button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="space-y-1">
-                  <h3 className="font-pokemon text-xl sm:text-2xl font-normal text-zinc-950 tracking-wider">
-                    SCRIVI AL LABORATORIO
-                  </h3>
-                  <p className="text-xs text-zinc-400">
-                    Compila i campi qui sotto per ricevere assistenza dedicata dal nostro team.
-                  </p>
-                </div>
-
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-mono uppercase tracking-wider text-zinc-600">
-                      Nome & Cognome *
+                    <label className="text-xs font-medium text-zinc-700">
+                      Nome
                     </label>
-                    <input
-                      type="text"
+                    <Input
                       required
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="es. Ash Ketchum"
-                      className="w-full px-4 py-3 bg-[#F6F6F6] border border-zinc-200 focus:border-zinc-950 focus:bg-white rounded-xl text-sm font-medium focus:outline-none transition-all"
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                      placeholder="Il tuo nome"
                     />
                   </div>
-
                   <div className="space-y-1.5">
-                    <label className="text-xs font-mono uppercase tracking-wider text-zinc-600">
-                      Email *
+                    <label className="text-xs font-medium text-zinc-700">
+                      Email
                     </label>
-                    <input
+                    <Input
                       type="email"
                       required
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder="es. trainer@pokemon.it"
-                      className="w-full px-4 py-3 bg-[#F6F6F6] border border-zinc-200 focus:border-zinc-950 focus:bg-white rounded-xl text-sm font-medium focus:outline-none transition-all"
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
+                      placeholder="nome@esempio.it"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-zinc-600">
-                    Motivo del Contatto
+                  <label className="text-xs font-medium text-zinc-700">
+                    Oggetto
                   </label>
-                  <select
+                  <Select
                     value={formData.subject}
-                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                    className="w-full px-4 py-3 bg-[#F6F6F6] border border-zinc-200 focus:border-zinc-950 focus:bg-white rounded-xl text-sm font-medium focus:outline-none transition-all cursor-pointer"
+                    onValueChange={(v) =>
+                      setFormData({ ...formData, subject: v })
+                    }
                   >
-                    <option value="custom_order">Richiesta Sfera Custom / Personalizzata</option>
-                    <option value="pokemon_request">Segnalazione Pokémon da inserire in produzione</option>
-                    <option value="order_tracking">Informazioni su Spedizione & Ordine</option>
-                    <option value="wholesale">Collaborazione / Ordini Quantità B2B</option>
-                    <option value="other">Altro</option>
-                  </select>
+                    <SelectTrigger className="h-10 text-sm">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="custom_order" className="text-sm">
+                        Richiesta Poké Ball Personalizzata
+                      </SelectItem>
+                      <SelectItem value="order_tracking" className="text-sm">
+                        Informazioni su un Ordine
+                      </SelectItem>
+                      <SelectItem value="other" className="text-sm">
+                        Altre Informazioni
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-zinc-600">
-                    Messaggio *
+                  <label className="text-xs font-medium text-zinc-700">
+                    Messaggio
                   </label>
                   <textarea
                     required
-                    rows={4}
+                    rows={5}
                     value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Descrivi la tua richiesta, i colori desiderati, o il Pokémon su cui vorresti realizzare la sfera..."
-                    className="w-full px-4 py-3 bg-[#F6F6F6] border border-zinc-200 focus:border-zinc-950 focus:bg-white rounded-xl text-sm font-medium focus:outline-none transition-all resize-none"
+                    onChange={(e) =>
+                      setFormData({ ...formData, message: e.target.value })
+                    }
+                    placeholder="Scrivi qui il tuo messaggio..."
+                    className="flex w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-950 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950"
                   />
                 </div>
 
-                <button
-                  type="submit"
-                  className="w-full py-4 rounded-xl bg-zinc-950 hover:bg-black text-white font-bold text-xs uppercase tracking-widest hover:scale-[1.01] transition-all flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <Send className="w-4 h-4" />
-                  <span>Invia Messaggio al Laboratorio</span>
-                </button>
+                <Button type="submit" className="w-full sm:w-auto">
+                  Invia Messaggio
+                </Button>
               </form>
             )}
           </div>

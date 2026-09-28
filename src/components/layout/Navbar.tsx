@@ -1,9 +1,43 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ShoppingBag, Search, Heart, User, Menu, X, ArrowRight, Smartphone } from 'lucide-react';
+import {
+  ShoppingBag,
+  Search,
+  Heart,
+  User,
+  Menu,
+  Smartphone,
+} from 'lucide-react';
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from '@/components/ui/navigation-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { useUI } from '@/context/UIContext';
@@ -16,225 +50,349 @@ export const Navbar: React.FC = () => {
   const { openSearch } = useUI();
   const { openNFCScan } = useCollection();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const navLinks = [
-    { href: '/shop', label: 'Shop' },
-    { href: '/pokemon', label: 'Collection' },
-    { href: '/collection', label: 'Vault' },
-    { href: '/custom', label: 'Custom' },
-    { href: '/limited', label: 'Limited' },
-  ];
 
   return (
     <>
-      {/* Discreet Studio Banner */}
-      <div className="bg-[#09090B] text-zinc-300 text-[11px] font-medium py-1.5 px-4 text-center tracking-wide border-b border-zinc-900">
-        <span>Spedizione Gratuita in Italia da 40€ &bull; Stampa 3D Artigianale FDM &bull; Made in Italy</span>
+      {/* Top Announcement Bar */}
+      <div className="bg-zinc-950 text-zinc-300 text-xs py-2 px-4 text-center border-b border-zinc-900">
+        <span>
+          Spedizione gratuita in Italia sopra i 40€ &bull; Stampa 3D FDM 0.16mm &bull; Made in Italy
+        </span>
       </div>
 
-      {/* Main Sticky Navbar */}
-      <header
-        className={`sticky top-0 z-40 w-full transition-all duration-300 ${
-          isScrolled
-            ? 'bg-white/95 backdrop-blur-md border-b border-zinc-200/80 shadow-xs'
-            : 'bg-white border-b border-zinc-100'
-        }`}
-      >
+      {/* Main Header */}
+      <header className="sticky top-0 z-40 w-full bg-white border-b border-zinc-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Left: Brand Identity */}
-            <Link
-              href="/"
-              className="flex items-center gap-2 group focus:outline-none"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <span className="font-title text-2xl font-black tracking-tight text-zinc-950 flex items-center group-hover:opacity-90 transition-opacity">
-                POKE<span className="text-red-600">3D</span>
-              </span>
-              <span className="text-[10px] font-mono tracking-widest text-zinc-400 uppercase hidden sm:inline-block border-l border-zinc-200 pl-2 ml-0.5">
-                STUDIO
-              </span>
-            </Link>
-
-            {/* Center: Editorial Nav Links */}
-            <nav className="hidden md:flex items-center gap-8 text-xs font-semibold uppercase tracking-wider text-zinc-600">
-              {navLinks.map((item) => {
-                const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`relative py-1 transition-colors ${
-                      isActive ? 'text-zinc-950 font-bold' : 'hover:text-zinc-950 text-zinc-600'
-                    }`}
-                  >
-                    <span>{item.label}</span>
-                    {isActive && (
-                      <span className="absolute -bottom-1.5 left-0 right-0 h-0.5 bg-zinc-950 rounded-full" />
-                    )}
-                  </Link>
-                );
-              })}
-            </nav>
-
-            {/* Right: Actions (NFC Claim, Search, Account, Wishlist, Cart) */}
-            <div className="flex items-center gap-1 sm:gap-2">
-              <button
-                onClick={openNFCScan}
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-zinc-950 hover:bg-zinc-800 text-white text-[11px] font-bold uppercase tracking-wider transition-all cursor-pointer mr-0.5 shadow-xs hover:scale-105"
-                title="Scansiona o Riscatta Poké Ball NFC"
-              >
-                <Smartphone className="w-3.5 h-3.5 text-red-500 animate-pulse" />
-                <span>NFC Claim</span>
-              </button>
-
-              <button
-                onClick={openSearch}
-                className="p-2.5 rounded-full text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100 transition-colors cursor-pointer"
-                aria-label="Cerca"
-              >
-                <Search className="w-4 h-4" />
-              </button>
-
+          <div className="flex items-center justify-between h-16 gap-4">
+            {/* Left: Brand & Desktop NavigationMenu */}
+            <div className="flex items-center gap-6">
               <Link
-                href="/account"
-                className="p-2.5 rounded-full text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100 transition-colors hidden sm:inline-flex"
-                aria-label="Account"
+                href="/"
+                className="font-title text-xl font-bold tracking-tight text-zinc-950"
               >
-                <User className="w-4 h-4" />
+                POKE<span className="text-red-600">3D</span>
               </Link>
 
-              <button
+              <div className="hidden md:flex">
+                <NavigationMenu>
+                  <NavigationMenuList>
+                    {/* Shop Dropdown */}
+                    <NavigationMenuItem>
+                      <NavigationMenuTrigger>Shop</NavigationMenuTrigger>
+                      <NavigationMenuContent>
+                        <ul className="grid w-[420px] gap-2 p-4 md:grid-cols-2">
+                          <li className="col-span-2">
+                            <NavigationMenuLink asChild>
+                              <Link
+                                href="/shop"
+                                className="flex flex-col justify-end rounded-md bg-zinc-50 border border-zinc-200 p-4 no-underline outline-none hover:bg-zinc-100 transition-colors"
+                              >
+                                <div className="text-sm font-semibold text-zinc-950">
+                                  Catalogo Completo
+                                </div>
+                                <p className="text-xs text-zinc-500 mt-1">
+                                  Tutte le Poké Ball stampate in 3D, Eeveelutions, stand e serie limitate.
+                                </p>
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                          <li>
+                            <NavigationMenuLink asChild>
+                              <Link
+                                href="/shop"
+                                className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-zinc-100"
+                              >
+                                <div className="text-xs font-semibold text-zinc-900">
+                                  Eeveelutions Series
+                                </div>
+                                <p className="text-xs text-zinc-500 line-clamp-2">
+                                  I 9 modelli dedicati a Eevee e alle sue evoluzioni + Set Completo.
+                                </p>
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                          <li>
+                            <NavigationMenuLink asChild>
+                              <Link
+                                href="/limited"
+                                className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-zinc-100"
+                              >
+                                <div className="text-xs font-semibold text-zinc-900">
+                                  Limited Editions
+                                </div>
+                                <p className="text-xs text-zinc-500 line-clamp-2">
+                                  Lotti numerati a tiratura limitata con supporto incluso.
+                                </p>
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                        </ul>
+                      </NavigationMenuContent>
+                    </NavigationMenuItem>
+
+                    <NavigationMenuItem>
+                      <NavigationMenuLink
+                        asChild
+                        className={cn(
+                          navigationMenuTriggerStyle(),
+                          pathname.startsWith('/pokemon') && 'bg-zinc-100 text-zinc-950'
+                        )}
+                      >
+                        <Link href="/pokemon">Pokémon</Link>
+                      </NavigationMenuLink>
+                    </NavigationMenuItem>
+
+                    <NavigationMenuItem>
+                      <NavigationMenuLink
+                        asChild
+                        className={cn(
+                          navigationMenuTriggerStyle(),
+                          pathname.startsWith('/collection') && 'bg-zinc-100 text-zinc-950'
+                        )}
+                      >
+                        <Link href="/collection">Collezione</Link>
+                      </NavigationMenuLink>
+                    </NavigationMenuItem>
+
+                    <NavigationMenuItem>
+                      <NavigationMenuLink
+                        asChild
+                        className={cn(
+                          navigationMenuTriggerStyle(),
+                          pathname.startsWith('/custom') && 'bg-zinc-100 text-zinc-950'
+                        )}
+                      >
+                        <Link href="/custom">Custom</Link>
+                      </NavigationMenuLink>
+                    </NavigationMenuItem>
+
+                    <NavigationMenuItem>
+                      <NavigationMenuLink
+                        asChild
+                        className={cn(
+                          navigationMenuTriggerStyle(),
+                          pathname.startsWith('/how-its-made') && 'bg-zinc-100 text-zinc-950'
+                        )}
+                      >
+                        <Link href="/how-its-made">Produzione</Link>
+                      </NavigationMenuLink>
+                    </NavigationMenuItem>
+                  </NavigationMenuList>
+                </NavigationMenu>
+              </div>
+            </div>
+
+            {/* Right: Search Command Trigger, NFC Claim, Account Dropdown, Wishlist, Cart, Mobile Sheet */}
+            <div className="flex items-center gap-1.5">
+              {/* Search Command Bar Button */}
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={openSearch}
+                className="hidden sm:inline-flex items-center justify-between w-48 lg:w-60 text-zinc-500 font-normal px-3"
+              >
+                <span className="flex items-center gap-2 text-xs truncate">
+                  <Search className="h-3.5 w-3.5 text-zinc-400" />
+                  <span>Cerca prodotti o Pokémon...</span>
+                </span>
+                <kbd className="pointer-events-none hidden lg:inline-flex h-5 select-none items-center gap-1 rounded border border-zinc-200 bg-zinc-50 px-1.5 font-mono text-[10px] font-medium text-zinc-500">
+                  ⌘K
+                </kbd>
+              </Button>
+
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={openSearch}
+                className="sm:hidden"
+                aria-label="Cerca"
+              >
+                <Search className="h-4 w-4" />
+              </Button>
+
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={openNFCScan}
+                className="hidden md:inline-flex"
+              >
+                <Smartphone className="h-3.5 w-3.5" />
+                <span>Riscatta NFC</span>
+              </Button>
+
+              {/* Account DropdownMenu */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="hidden sm:inline-flex"
+                    aria-label="Menu utente"
+                  >
+                    <User className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuLabel>Il Tuo Profilo</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/account">Ordini e Account</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/collection">Album Collezione NFC</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={openNFCScan}>
+                    Scansiona Codice NFC
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/faq">Domande Frequenti</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/contact">Contatti</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Wishlist Trigger */}
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
                 onClick={openWishlist}
-                className="relative p-2.5 rounded-full text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100 transition-colors cursor-pointer"
+                className="relative"
                 aria-label="Wishlist"
               >
-                <Heart className="w-4 h-4" />
+                <Heart className="h-4 w-4" />
                 {wishlistCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 flex items-center justify-center min-w-[15px] h-3.5 px-0.5 rounded-full bg-red-600 text-white text-[9px] font-bold">
+                  <span className="absolute top-1 right-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-zinc-900 px-1 text-[10px] font-medium text-white">
                     {wishlistCount}
                   </span>
                 )}
-              </button>
+              </Button>
 
-              <button
+              {/* Cart Trigger */}
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
                 onClick={openCart}
-                className="relative p-2.5 rounded-full text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100 transition-colors cursor-pointer"
+                className="relative"
                 aria-label="Carrello"
               >
-                <ShoppingBag className="w-4 h-4" />
+                <ShoppingBag className="h-4 w-4" />
                 {totalItemsCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 flex items-center justify-center min-w-[15px] h-3.5 px-0.5 rounded-full bg-black text-white text-[9px] font-bold">
+                  <span className="absolute top-1 right-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-medium text-white">
                     {totalItemsCount}
                   </span>
                 )}
-              </button>
+              </Button>
 
-              {/* Mobile Menu Trigger */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2.5 rounded-full text-zinc-700 hover:bg-zinc-100 transition-colors cursor-pointer ml-1"
-                aria-label="Menu"
-              >
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </button>
+              {/* Mobile Navigation Sheet */}
+              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="md:hidden"
+                    aria-label="Apri menu"
+                  >
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="flex flex-col justify-between">
+                  <div className="space-y-6">
+                    <SheetHeader>
+                      <SheetTitle className="font-title text-lg font-bold">
+                        POKE<span className="text-red-600">3D</span>
+                      </SheetTitle>
+                    </SheetHeader>
+
+                    <Separator />
+
+                    <nav className="flex flex-col space-y-1 text-sm font-medium text-zinc-800">
+                      <Link
+                        href="/shop"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="rounded-md px-3 py-2 hover:bg-zinc-100"
+                      >
+                        Shop Catalogo
+                      </Link>
+                      <Link
+                        href="/pokemon"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="rounded-md px-3 py-2 hover:bg-zinc-100"
+                      >
+                        Pokémon Collection
+                      </Link>
+                      <Link
+                        href="/collection"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="rounded-md px-3 py-2 hover:bg-zinc-100"
+                      >
+                        Album Digitale NFC
+                      </Link>
+                      <Link
+                        href="/custom"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="rounded-md px-3 py-2 hover:bg-zinc-100"
+                      >
+                        Custom Configurator
+                      </Link>
+                      <Link
+                        href="/limited"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="rounded-md px-3 py-2 hover:bg-zinc-100"
+                      >
+                        Limited Editions
+                      </Link>
+                      <Link
+                        href="/how-its-made"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="rounded-md px-3 py-2 text-zinc-500 hover:bg-zinc-100"
+                      >
+                        Come Stampiamo
+                      </Link>
+                      <Link
+                        href="/about"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="rounded-md px-3 py-2 text-zinc-500 hover:bg-zinc-100"
+                      >
+                        Chi Siamo
+                      </Link>
+                      <Link
+                        href="/account"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="rounded-md px-3 py-2 text-zinc-500 hover:bg-zinc-100"
+                      >
+                        Account e Ordini
+                      </Link>
+                    </nav>
+                  </div>
+
+                  <div className="pt-4 border-t border-zinc-200">
+                    <Button
+                      type="button"
+                      className="w-full"
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        openNFCScan();
+                      }}
+                    >
+                      <Smartphone className="h-4 w-4" />
+                      <span>Riscatta Poké Ball NFC</span>
+                    </Button>
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
           </div>
         </div>
-
-        {/* Mobile Navigation Drawer */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-b border-zinc-200 px-6 py-6 space-y-4 animate-in slide-in-from-top-2 duration-200">
-            {/* Quick NFC Button in Mobile Menu */}
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                openNFCScan();
-              }}
-              className="w-full py-2.5 px-4 rounded-xl bg-zinc-950 text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xs cursor-pointer"
-            >
-              <Smartphone className="w-4 h-4 text-red-500 animate-pulse" />
-              <span>Scansiona Chip NFC</span>
-            </button>
-
-            <div className="flex flex-col space-y-3 text-sm font-semibold tracking-wide text-zinc-800">
-              <Link
-                href="/shop"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-1.5 flex items-center justify-between hover:text-red-600"
-              >
-                <span>Shop Poké Ball</span>
-                <ArrowRight className="w-4 h-4 text-zinc-400" />
-              </Link>
-              <Link
-                href="/pokemon"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-1.5 flex items-center justify-between hover:text-red-600"
-              >
-                <span>Pokémon Collection (Social)</span>
-                <ArrowRight className="w-4 h-4 text-zinc-400" />
-              </Link>
-              <Link
-                href="/collection"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-1.5 flex items-center justify-between hover:text-red-600"
-              >
-                <span>Il Tuo Vault (Album)</span>
-                <ArrowRight className="w-4 h-4 text-zinc-400" />
-              </Link>
-              <Link
-                href="/custom"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-1.5 flex items-center justify-between hover:text-red-600"
-              >
-                <span>Custom Lab 3D</span>
-                <ArrowRight className="w-4 h-4 text-zinc-400" />
-              </Link>
-              <Link
-                href="/limited"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-1.5 flex items-center justify-between hover:text-red-600"
-              >
-                <span>Limited Drops</span>
-                <ArrowRight className="w-4 h-4 text-zinc-400" />
-              </Link>
-              <Link
-                href="/how-its-made"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-1.5 flex items-center justify-between text-zinc-500 font-normal"
-              >
-                <span>How It&apos;s Made</span>
-                <ArrowRight className="w-4 h-4 text-zinc-400" />
-              </Link>
-              <Link
-                href="/about"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-1.5 flex items-center justify-between text-zinc-500 font-normal"
-              >
-                <span>About</span>
-                <ArrowRight className="w-4 h-4 text-zinc-400" />
-              </Link>
-              <Link
-                href="/account"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-1.5 flex items-center justify-between text-zinc-500 font-normal"
-              >
-                <span>Account & Ordini</span>
-                <ArrowRight className="w-4 h-4 text-zinc-400" />
-              </Link>
-            </div>
-          </div>
-        )}
       </header>
     </>
   );

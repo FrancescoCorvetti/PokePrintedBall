@@ -1,9 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
-import { X, CheckCircle2, MessageSquare, CreditCard, ArrowRight, Truck, Sparkles } from 'lucide-react';
-import confetti from 'canvas-confetti';
+import { Check } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
 import { useCart } from '@/context/CartContext';
 
 interface CheckoutModalProps {
@@ -11,10 +19,13 @@ interface CheckoutModalProps {
   onClose: () => void;
 }
 
-export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
-  const { items, subtotal, shippingPrice, grandTotal, clearCart, hasMadeToOrderItems } = useCart();
+export const CheckoutModal: React.FC<CheckoutModalProps> = ({
+  isOpen,
+  onClose,
+}) => {
+  const { items, subtotal, shippingPrice, grandTotal, clearCart } = useCart();
 
-  const [paymentMethod, setPaymentMethod] = useState<'whatsapp' | 'card'>('whatsapp');
+  const [paymentMethod, setPaymentMethod] = useState<'whatsapp' | 'card'>('card');
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -23,67 +34,40 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
     city: '',
     postalCode: '',
     province: '',
-    notes: '',
   });
-
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
 
-  if (!isOpen) return null;
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const triggerConfetti = () => {
-    try {
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 },
-      });
-    } catch {
-      // Ignore if canvas-confetti is not loaded
-    }
-  };
-
   const handleSubmitOrder = (e: React.FormEvent) => {
     e.preventDefault();
-
     const generatedOrderNum = `PKB-${Math.floor(100000 + Math.random() * 900000)}`;
     setOrderNumber(generatedOrderNum);
 
     if (paymentMethod === 'whatsapp') {
       const itemsListText = items
-        .map((item, idx) => {
-          let line = `${idx + 1}. *${item.product.name}* (x${item.quantity}) - ${item.itemTotalPrice.toFixed(2)}€\n`;
-          line += `   - Supporto: ${item.customization.selectedSupport.name}\n`;
-          line += `   - Finitura: ${item.customization.selectedFinish.name}\n`;
-          if (item.customization.customEngravingText) {
-            line += `   - Incisione: "${item.customization.customEngravingText}"\n`;
-          }
-          return line;
-        })
+        .map(
+          (item, idx) =>
+            `${idx + 1}. ${item.product.name} (x${item.quantity}) - ${item.itemTotalPrice.toFixed(2)}€`
+        )
         .join('\n');
 
-      const message = `👋 Ciao POKE3D! Vorrei confermare il mio ordine *#${generatedOrderNum}*:\n\n` +
-        `📦 *COLLECTIBLE ORDINATI:*\n${itemsListText}\n` +
-        `💰 *RIEPILOGO:* \n- Subtotale: ${subtotal.toFixed(2)}€\n- Spedizione: ${shippingPrice === 0 ? 'Gratuita' : `${shippingPrice.toFixed(2)}€`}\n- *TOTALE: ${grandTotal.toFixed(2)}€*\n\n` +
-        `📍 *DATI DI SPEDIZIONE:*\n- Nome: ${formData.fullName}\n- Tel: ${formData.phone}\n- Indirizzo: ${formData.address}, ${formData.postalCode} ${formData.city} (${formData.province.toUpperCase()})\n` +
-        (formData.notes ? `- Note: ${formData.notes}\n` : '') +
-        `\nIn attesa di vostre indicazioni per il pagamento (PayPal, Bonifico o Satispay). Grazie!`;
+      const message =
+        `Ordine POKE3D #${generatedOrderNum}\n\n` +
+        `Articoli:\n${itemsListText}\n\n` +
+        `Totale: ${grandTotal.toFixed(2)}€\n` +
+        `Destinatario: ${formData.fullName}, ${formData.address}, ${formData.postalCode} ${formData.city} (${formData.province.toUpperCase()})`;
 
-      const encodedMessage = encodeURIComponent(message);
-      const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
-
-      window.open(whatsappUrl, '_blank');
+      window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
     }
 
     setIsSubmitted(true);
-    triggerConfetti();
     clearCart();
   };
 
@@ -93,278 +77,184 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in">
-      <div
-        className="relative w-full max-w-2xl rounded-3xl bg-white border border-slate-200 shadow-2xl text-slate-900 overflow-hidden my-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Close Button */}
-        <button
-          onClick={handleResetAndClose}
-          className="absolute top-5 right-5 z-20 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 transition-colors cursor-pointer"
-          aria-label="Chiudi"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
+    <Dialog open={isOpen} onOpenChange={(open) => !open && handleResetAndClose()}>
+      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
         {isSubmitted ? (
-          /* Confirmation View */
-          <div className="p-8 sm:p-12 text-center space-y-6">
-            <div className="w-20 h-20 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto text-emerald-600">
-              <CheckCircle2 className="w-10 h-10" />
+          <div className="py-6 text-center space-y-4">
+            <div className="h-12 w-12 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mx-auto">
+              <Check className="h-6 w-6" />
             </div>
-
-            <div className="space-y-2">
-              <span className="text-xs font-black uppercase tracking-wider text-emerald-600">
-                Ordine Inoltrato con Successo!
-              </span>
-              <h3 className="text-2xl sm:text-3xl font-black text-slate-950">
-                Grazie {formData.fullName}!
-              </h3>
-              <p className="text-sm text-slate-500 max-w-md mx-auto">
-                Il tuo codice ordine POKE3D è <strong className="text-slate-900 font-mono">{orderNumber}</strong>. Abbiamo riservato il tuo slot di stampa e ti aggiorneremo su WhatsApp/email.
-              </p>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-left max-w-md mx-auto space-y-2.5 text-xs text-slate-600">
-              <div className="flex justify-between">
-                <span className="text-slate-400">Metodo scelto:</span>
-                <span className="font-bold text-slate-900">
-                  {paymentMethod === 'whatsapp' ? 'Conferma via WhatsApp' : 'Carta di Credito / Online'}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Indirizzo di spedizione:</span>
-                <span className="font-bold text-slate-900 truncate max-w-[200px]">
-                  {formData.address}, {formData.city}
-                </span>
-              </div>
-              <div className="flex justify-between pt-2 border-t border-slate-200">
-                <span className="text-slate-400">Totale concordato:</span>
-                <span className="font-black text-red-600 text-base">{grandTotal.toFixed(2)}€</span>
-              </div>
-            </div>
-
-            <button
-              onClick={handleResetAndClose}
-              className="px-8 py-3.5 rounded-xl bg-slate-950 hover:bg-red-600 text-white font-black text-xs uppercase tracking-wider shadow-lg transition-all cursor-pointer"
-            >
+            <DialogHeader className="text-center sm:text-center">
+              <DialogTitle>Ordine Confermato</DialogTitle>
+              <DialogDescription>
+                Grazie {formData.fullName}. Il codice del tuo ordine è{' '}
+                <strong className="font-mono text-zinc-950">{orderNumber}</strong>.
+              </DialogDescription>
+            </DialogHeader>
+            <Button onClick={handleResetAndClose} className="w-full">
               Torna allo Shop
-            </button>
+            </Button>
           </div>
         ) : (
-          /* Order Form View */
-          <form onSubmit={handleSubmitOrder} className="p-6 sm:p-8 space-y-6">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="relative overflow-hidden rounded-full ring-2 ring-red-500/60 shadow-xs shrink-0">
-                  <Image
-                    src="/logo.jpg"
-                    alt="POKE3D"
-                    width={36}
-                    height={36}
-                    className="object-cover"
-                  />
-                </div>
-                <div>
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-red-50 text-red-600 text-[10px] font-black uppercase">
-                    <Sparkles className="w-3 h-3" />
-                    <span>POKE3D CHECKOUT</span>
-                  </div>
-                </div>
-              </div>
-              <h3 className="text-2xl font-black text-slate-950">Dati di Spedizione & Checkout</h3>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Inserisci l&apos;indirizzo a cui recapitare le tue sfere artigianali.
-              </p>
-            </div>
+          <>
+            <DialogHeader>
+              <DialogTitle>Checkout</DialogTitle>
+              <DialogDescription>
+                Inserisci i dati di spedizione per completare l&apos;ordine.
+              </DialogDescription>
+            </DialogHeader>
 
-            {/* Delivery time notice */}
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs text-slate-700">
-              <div className="flex items-center gap-2">
-                <Truck className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>
-                  {hasMadeToOrderItems
-                    ? 'Spedizione con corriere espresso in 2-3 gg lavorativi (stampa artigianale inclusa)'
-                    : 'Spedizione rapida in 24/48h (tutti i modelli sono pronti a magazzino)'}
-                </span>
-              </div>
-              <span className="font-black text-slate-950 shrink-0 ml-2">
-                {shippingPrice === 0 ? 'Gratis' : `${shippingPrice.toFixed(2)}€`}
-              </span>
-            </div>
-
-            {/* Form Fields */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Nome e Cognome *</label>
-                <input
-                  required
-                  type="text"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleInputChange}
-                  placeholder="Es. Gabriele Rossi"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 focus:border-red-600 focus:bg-white focus:outline-none text-xs text-slate-900 placeholder-slate-400"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Telefono / WhatsApp *</label>
-                <input
-                  required
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  placeholder="Es. +39 340 1234567"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 focus:border-red-600 focus:bg-white focus:outline-none text-xs text-slate-900 placeholder-slate-400"
-                />
-              </div>
-
-              <div className="sm:col-span-2">
-                <label className="block text-xs font-bold text-slate-700 mb-1">Email per Tracciamento *</label>
-                <input
-                  required
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="tua-email@esempio.it"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 focus:border-red-600 focus:bg-white focus:outline-none text-xs text-slate-900 placeholder-slate-400"
-                />
-              </div>
-
-              <div className="sm:col-span-2">
-                <label className="block text-xs font-bold text-slate-700 mb-1">Indirizzo Completo (Via e N. Civico) *</label>
-                <input
-                  required
-                  type="text"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  placeholder="Es. Via Roma 10"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 focus:border-red-600 focus:bg-white focus:outline-none text-xs text-slate-900 placeholder-slate-400"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Città *</label>
-                <input
-                  required
-                  type="text"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleInputChange}
-                  placeholder="Milano"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 focus:border-red-600 focus:bg-white focus:outline-none text-xs text-slate-900 placeholder-slate-400"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">CAP *</label>
-                  <input
-                    required
-                    type="text"
-                    name="postalCode"
-                    value={formData.postalCode}
-                    onChange={handleInputChange}
-                    placeholder="20100"
-                    className="w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-300 focus:border-red-600 focus:bg-white focus:outline-none text-xs text-slate-900 placeholder-slate-400"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Prov. *</label>
-                  <input
-                    required
-                    maxLength={2}
-                    type="text"
-                    name="province"
-                    value={formData.province}
-                    onChange={handleInputChange}
-                    placeholder="MI"
-                    className="w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-300 focus:border-red-600 focus:bg-white focus:outline-none text-xs text-slate-900 placeholder-slate-400 uppercase"
-                  />
-                </div>
-              </div>
-
-              <div className="sm:col-span-2">
-                <label className="block text-xs font-bold text-slate-700 mb-1">Note sull&apos;ordine (Opzionale)</label>
-                <textarea
-                  name="notes"
-                  rows={2}
-                  value={formData.notes}
-                  onChange={handleInputChange}
-                  placeholder="Istruzioni per la consegna..."
-                  className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-300 focus:border-red-600 focus:bg-white focus:outline-none text-xs text-slate-900 placeholder-slate-400"
-                />
-              </div>
-            </div>
-
-            {/* Payment Method Selector */}
-            <div className="space-y-2.5 pt-2 border-t border-slate-200">
-              <label className="block text-xs font-black uppercase tracking-wider text-slate-900">
-                Metodo di Conferma & Pagamento:
-              </label>
-
+            <form onSubmit={handleSubmitOrder} className="space-y-4 pt-2">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod('whatsapp')}
-                  className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
-                    paymentMethod === 'whatsapp'
-                      ? 'border-zinc-950 bg-[#F6F6F6] ring-1 ring-zinc-950'
-                      : 'border-zinc-200 bg-white hover:border-zinc-300'
-                  }`}
-                >
-                  <div className="flex items-center gap-2 font-bold text-xs text-zinc-900">
-                    <MessageSquare className="w-4 h-4 text-emerald-600" />
-                    <span>Conferma via WhatsApp</span>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-zinc-700">
+                    Nome e Cognome
+                  </label>
+                  <Input
+                    required
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleInputChange}
+                    placeholder="Nome e cognome"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-zinc-700">
+                    Telefono
+                  </label>
+                  <Input
+                    required
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    placeholder="+39 340..."
+                  />
+                </div>
+                <div className="sm:col-span-2 space-y-1">
+                  <label className="text-xs font-medium text-zinc-700">
+                    Email
+                  </label>
+                  <Input
+                    required
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="nome@esempio.it"
+                  />
+                </div>
+                <div className="sm:col-span-2 space-y-1">
+                  <label className="text-xs font-medium text-zinc-700">
+                    Indirizzo
+                  </label>
+                  <Input
+                    required
+                    name="address"
+                    value={formData.address}
+                    onChange={handleInputChange}
+                    placeholder="Via e numero civico"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-zinc-700">
+                    Città
+                  </label>
+                  <Input
+                    required
+                    name="city"
+                    value={formData.city}
+                    onChange={handleInputChange}
+                    placeholder="Milano"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-zinc-700">
+                      CAP
+                    </label>
+                    <Input
+                      required
+                      name="postalCode"
+                      value={formData.postalCode}
+                      onChange={handleInputChange}
+                      placeholder="20100"
+                    />
                   </div>
-                  <p className="text-[11px] text-zinc-500 mt-1 leading-relaxed">
-                    Invia il riepilogo al maker: ricevi foto del pezzo, concorda Satispay, PayPal o bonifico.
-                  </p>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod('card')}
-                  className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
-                    paymentMethod === 'card'
-                      ? 'border-zinc-950 bg-[#F6F6F6] ring-1 ring-zinc-950'
-                      : 'border-zinc-200 bg-white hover:border-zinc-300'
-                  }`}
-                >
-                  <div className="flex items-center gap-2 font-bold text-xs text-zinc-900">
-                    <CreditCard className="w-4 h-4 text-zinc-900" />
-                    <span>Carta di Credito / Online</span>
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-zinc-700">
+                      Prov.
+                    </label>
+                    <Input
+                      required
+                      maxLength={2}
+                      name="province"
+                      value={formData.province}
+                      onChange={handleInputChange}
+                      placeholder="MI"
+                      className="uppercase"
+                    />
                   </div>
-                  <p className="text-[11px] text-zinc-500 mt-1 leading-relaxed">
-                    Predisposizione checkout crittografato SSL a 256-bit.
-                  </p>
-                </button>
-              </div>
-            </div>
-
-            {/* Summary & Submit */}
-            <div className="pt-4 border-t border-zinc-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div>
-                <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 block">Totale Ordine</span>
-                <p className="text-2xl font-black text-zinc-950">{grandTotal.toFixed(2)}€</p>
+                </div>
               </div>
 
-              <button
-                type="submit"
-                className="w-full sm:w-auto px-8 py-4 rounded-xl bg-zinc-950 hover:bg-black text-white font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <span>Conferma Ordine ({grandTotal.toFixed(2)}€)</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          </form>
+              <Separator />
+
+              <div className="space-y-2">
+                <label className="text-xs font-medium text-zinc-700 block">
+                  Modalità di pagamento
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod('card')}
+                    className={`p-3 rounded-md border text-left text-xs transition-colors cursor-pointer ${
+                      paymentMethod === 'card'
+                        ? 'border-zinc-950 bg-zinc-50 font-semibold text-zinc-950'
+                        : 'border-zinc-200 text-zinc-600'
+                    }`}
+                  >
+                    Carta / PayPal
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod('whatsapp')}
+                    className={`p-3 rounded-md border text-left text-xs transition-colors cursor-pointer ${
+                      paymentMethod === 'whatsapp'
+                        ? 'border-zinc-950 bg-zinc-50 font-semibold text-zinc-950'
+                        : 'border-zinc-200 text-zinc-600'
+                    }`}
+                  >
+                    Ordine via WhatsApp
+                  </button>
+                </div>
+              </div>
+
+              <Separator />
+
+              <div className="space-y-1 text-xs text-zinc-600">
+                <div className="flex justify-between">
+                  <span>Subtotale</span>
+                  <span>{subtotal.toFixed(2)}€</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Spedizione</span>
+                  <span>
+                    {shippingPrice === 0 ? 'Gratuita' : `${shippingPrice.toFixed(2)}€`}
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm font-semibold text-zinc-950 pt-1">
+                  <span>Totale</span>
+                  <span>{grandTotal.toFixed(2)}€</span>
+                </div>
+              </div>
+
+              <Button type="submit" className="w-full">
+                Conferma Ordine ({grandTotal.toFixed(2)}€)
+              </Button>
+            </form>
+          </>
         )}
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };
