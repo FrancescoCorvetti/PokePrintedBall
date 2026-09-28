@@ -1,5 +1,6 @@
 export type ProductCategory = 
   | 'pokeballs' 
+  | 'eeveelutions'
   | 'special-balls' 
   | 'collectibles' 
   | 'custom' 
@@ -14,6 +15,16 @@ export type BallType =
   | 'duskball' 
   | 'luxuryball' 
   | 'quickball'
+  | 'eeveeball'
+  | 'vaporeonball'
+  | 'jolteonball'
+  | 'flareonball'
+  | 'espeonball'
+  | 'umbreonball'
+  | 'leafeonball'
+  | 'glaceonball'
+  | 'sylveonball'
+  | 'eeveelutions-set'
   | 'custom';
 
 export type StockStatus = 'in_stock' | 'made_to_order' | 'sold_out';

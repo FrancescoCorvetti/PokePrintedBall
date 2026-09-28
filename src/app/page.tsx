@@ -19,6 +19,9 @@ export default function HomePage() {
   // 4 Top featured products for clean gallery display
   const featuredProducts = productsData.slice(0, 4);
 
+  // Eeveelutions series products
+  const eeveelutionProducts = productsData.filter((p) => p.category === 'eeveelutions');
+
   // 4 Iconic Pokémon for archive spotlight
   const spotlightPokemon = pokemonData.slice(0, 4);
 
@@ -84,6 +87,37 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {featuredProducts.map((prod) => (
+            <ProductCard key={prod.id} product={prod} />
+          ))}
+        </div>
+      </section>
+
+      {/* 3B. Eeveelutions Complete Series Showcase */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 pb-4 border-b border-zinc-200">
+          <div>
+            <span className="text-[11px] font-mono tracking-widest uppercase text-amber-600 font-semibold block mb-1">
+              NEW RELEASE &bull; 9 SCULPTED MODELS + DISPLAY STAND
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-zinc-950">
+              EEVEELUTIONS SERIES
+            </h2>
+            <p className="text-xs sm:text-sm text-zinc-500 mt-1">
+              Tutte le 9 evoluzioni di Eevee stampate in 3D con orecchie, code, collari e dettagli multi-parte in rilievo.
+            </p>
+          </div>
+
+          <Link
+            href="/shop"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-900 hover:text-red-600 transition-colors self-start sm:self-auto"
+          >
+            <span>Esplora la Collezione ({eeveelutionProducts.length})</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+          {eeveelutionProducts.map((prod) => (
             <ProductCard key={prod.id} product={prod} />
           ))}
         </div>

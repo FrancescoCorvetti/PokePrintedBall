@@ -61,6 +61,26 @@ export function resolveBallImage(
       return '/products/luxuryball.jpg';
     case 'quickball':
       return '/products/quickball.jpg';
+    case 'eeveeball':
+      return '/products/eeveeball.jpg';
+    case 'vaporeonball':
+      return '/products/vaporeonball.jpg';
+    case 'jolteonball':
+      return '/products/jolteonball.jpg';
+    case 'flareonball':
+      return '/products/flareonball.jpg';
+    case 'espeonball':
+      return '/products/espeonball.jpg';
+    case 'umbreonball':
+      return '/products/umbreonball.jpg';
+    case 'leafeonball':
+      return '/products/leafeonball.jpg';
+    case 'glaceonball':
+      return '/products/glaceonball.jpg';
+    case 'sylveonball':
+      return '/products/sylveonball.jpg';
+    case 'eeveelutions-set':
+      return '/products/eeveelutions-set.jpg';
     case 'custom':
     default:
       return '/products/customball.jpg';

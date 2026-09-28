@@ -12,6 +12,7 @@ export default function ShopPage() {
 
   const categories = [
     { id: 'all', label: 'Tutti i Prodotti' },
+    { id: 'eeveelutions', label: 'Eeveelutions' },
     { id: 'pokeballs', label: 'Poké Balls' },
     { id: 'special-balls', label: 'Special Balls' },
     { id: 'collectibles', label: 'Collectibles' },

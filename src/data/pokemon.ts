@@ -1986,7 +1986,8 @@ export const pokemonData: PokemonItem[] = [
     "description": "La sua configurazione genetica instabile gli consente di mutare forma adattandosi a qualsiasi ambiente circostante.",
     "poke3dStatus": "AVAILABLE",
     "matchedProductSlugs": [
-      "classic-mk4"
+      "eevee-evolution-ball",
+      "eeveelutions-complete-set"
     ],
     "suggestedCustomColors": {
       "topColor": "#B45309",
@@ -2006,8 +2007,11 @@ export const pokemonData: PokemonItem[] = [
     ],
     "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/134.png",
     "description": "It detects nearby moisture with its fin. When its fin begins trembling rapidly, that means rain will fall in a few hours.",
-    "poke3dStatus": "CUSTOM REQUEST",
-    "matchedProductSlugs": []
+    "poke3dStatus": "AVAILABLE",
+    "matchedProductSlugs": [
+      "vaporeon-aqua-ball",
+      "eeveelutions-complete-set"
+    ]
   },
   {
     "id": 135,
@@ -2020,8 +2024,11 @@ export const pokemonData: PokemonItem[] = [
     ],
     "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/135.png",
     "description": "Its fur stands on end, becoming like needles it fires at enemies. Once they’re weakened, it finishes them off with a 10,000 volt shock.",
-    "poke3dStatus": "CUSTOM REQUEST",
-    "matchedProductSlugs": []
+    "poke3dStatus": "AVAILABLE",
+    "matchedProductSlugs": [
+      "jolteon-thunder-ball",
+      "eeveelutions-complete-set"
+    ]
   },
   {
     "id": 136,
@@ -2034,8 +2041,11 @@ export const pokemonData: PokemonItem[] = [
     ],
     "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/136.png",
     "description": "The flame chamber inside its body ignites when Flareon gets agitated, reaching temperatures of up to 1,650 degrees Fahrenheit.",
-    "poke3dStatus": "CUSTOM REQUEST",
-    "matchedProductSlugs": []
+    "poke3dStatus": "AVAILABLE",
+    "matchedProductSlugs": [
+      "flareon-flame-ball",
+      "eeveelutions-complete-set"
+    ]
   },
   {
     "id": 137,
@@ -2926,7 +2936,8 @@ export const pokemonData: PokemonItem[] = [
     "description": "Riconosce le correnti d'aria con la sottile peluria sul corpo per prevedere il tempo e le mosse degli avversari.",
     "poke3dStatus": "AVAILABLE",
     "matchedProductSlugs": [
-      "premier-ceremonial"
+      "espeon-psychic-ball",
+      "eeveelutions-complete-set"
     ],
     "suggestedCustomColors": {
       "topColor": "#C084FC",
@@ -2948,8 +2959,8 @@ export const pokemonData: PokemonItem[] = [
     "description": "Quando si espone alla luce lunare, i cerchi sul corpo brillano di una luce fioca e misteriosa che incute rispetto.",
     "poke3dStatus": "AVAILABLE",
     "matchedProductSlugs": [
-      "luxury-onyx-gold",
-      "nocturnal-bio-glow"
+      "umbreon-night-ball",
+      "eeveelutions-complete-set"
     ],
     "suggestedCustomColors": {
       "topColor": "#18181B",
@@ -6934,8 +6945,11 @@ export const pokemonData: PokemonItem[] = [
     ],
     "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/470.png",
     "description": "It gets its nutrition from photosynthesis. It lives a quiet life deep in forests where clean rivers flow.",
-    "poke3dStatus": "CUSTOM REQUEST",
-    "matchedProductSlugs": []
+    "poke3dStatus": "AVAILABLE",
+    "matchedProductSlugs": [
+      "leafeon-botanical-ball",
+      "eeveelutions-complete-set"
+    ]
   },
   {
     "id": 471,
@@ -6948,8 +6962,11 @@ export const pokemonData: PokemonItem[] = [
     ],
     "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/471.png",
     "description": "It can instantaneously freeze any moisture that’s around it, creating ice pellets to shoot at its prey.",
-    "poke3dStatus": "CUSTOM REQUEST",
-    "matchedProductSlugs": []
+    "poke3dStatus": "AVAILABLE",
+    "matchedProductSlugs": [
+      "glaceon-crystal-ball",
+      "eeveelutions-complete-set"
+    ]
   },
   {
     "id": 472,
@@ -10264,8 +10281,11 @@ export const pokemonData: PokemonItem[] = [
     ],
     "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/700.png",
     "description": "Sylveon wraps its ribbonlike feelers around its Trainer’s arm because this touch enables it to read its Trainer’s feelings.",
-    "poke3dStatus": "CUSTOM REQUEST",
-    "matchedProductSlugs": []
+    "poke3dStatus": "AVAILABLE",
+    "matchedProductSlugs": [
+      "sylveon-ribbon-ball",
+      "eeveelutions-complete-set"
+    ]
   },
   {
     "id": 701,
