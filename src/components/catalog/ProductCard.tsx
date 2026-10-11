@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Heart, Check } from 'lucide-react';
+import { Heart, ShoppingBag, Check } from 'lucide-react';
 import { Product } from '@/types/product';
 import { StudioPokeballGraphic } from '@/components/ui/StudioPokeballGraphic';
 import { useWishlist } from '@/context/WishlistContext';
@@ -46,19 +46,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className }) 
     setTimeout(() => {
       setJustAdded(false);
       openCart();
-    }, 400);
+    }, 350);
   };
 
   return (
     <div
       className={cn(
-        'group relative flex flex-col justify-between bg-[#131318] hover:bg-[#18181f] border border-zinc-800/90 hover:border-zinc-700/90 rounded-2xl p-3 sm:p-3.5 transition-all duration-200 shadow-lg',
+        'group relative flex flex-col justify-between bg-[#121217] hover:bg-[#16161c] border border-zinc-800/80 hover:border-zinc-700 rounded-2xl p-4 sm:p-5 transition-all duration-300 hover:shadow-xl hover:shadow-black/60',
         className
       )}
     >
       <div>
-        {/* Top Image Box with Heart Button */}
-        <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-black/40 mb-3 flex items-center justify-center">
+        {/* Top Product Image Frame */}
+        <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-[#0a0a0d] border border-zinc-800/60 mb-4 flex items-center justify-center">
           <Link href={`/shop/${product.slug}`} className="block w-full h-full">
             <div className="w-full h-full transform transition-transform duration-300 group-hover:scale-105">
               <StudioPokeballGraphic
@@ -69,6 +69,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className }) 
             </div>
           </Link>
 
+          {/* Badge if available */}
+          {product.badge && (
+            <span className="absolute top-3 left-3 px-2 py-0.5 rounded-full bg-black/70 border border-zinc-700/80 text-[10px] font-mono text-zinc-300 uppercase tracking-wider backdrop-blur-xs pointer-events-none">
+              {product.badge}
+            </span>
+          )}
+
           {/* Wishlist Heart Button */}
           <button
             type="button"
@@ -78,10 +85,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className }) 
               toggleWishlist(product.id);
             }}
             className={cn(
-              'absolute top-2.5 right-2.5 p-1.5 rounded-full transition-all cursor-pointer backdrop-blur-xs',
+              'absolute top-3 right-3 p-2 rounded-full transition-all cursor-pointer backdrop-blur-xs',
               isFavorited
-                ? 'bg-red-500/20 text-red-500'
-                : 'bg-black/40 text-zinc-400 hover:text-white hover:bg-black/70'
+                ? 'bg-red-500/20 text-red-500 border border-red-500/30'
+                : 'bg-black/50 text-zinc-400 hover:text-white hover:bg-black/80 border border-white/10'
             )}
             aria-label="Aggiungi ai preferiti"
           >
@@ -94,26 +101,32 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className }) 
           </button>
         </div>
 
-        {/* Product Info */}
-        <div className="space-y-1 mb-3">
+        {/* Product Details */}
+        <div className="space-y-1.5 mb-4">
+          <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 uppercase tracking-wider">
+            <span>{product.categoryLabel}</span>
+            <span className="text-emerald-500/90 font-medium">In Stock</span>
+          </div>
+
           <Link
             href={`/shop/${product.slug}`}
-            className="text-xs sm:text-sm font-semibold text-white group-hover:text-red-400 transition-colors line-clamp-1 block"
+            className="text-base font-bold text-white group-hover:text-red-400 transition-colors line-clamp-1 block tracking-tight"
           >
             {product.name}
           </Link>
-          <div className="text-xs sm:text-sm font-bold text-white">
+
+          <div className="text-base font-extrabold text-white">
             €{product.price.toFixed(2).replace('.', ',')}
           </div>
         </div>
       </div>
 
-      {/* Red Add to Cart Button */}
+      {/* Full-width Red Action Button */}
       <button
         type="button"
         onClick={handleAddToCart}
         className={cn(
-          'w-full py-2.5 px-3 rounded-xl font-medium text-xs tracking-wide transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md',
+          'w-full py-3 px-4 rounded-xl font-semibold text-xs tracking-wider uppercase transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md',
           justAdded
             ? 'bg-emerald-600 text-white'
             : 'bg-red-500 hover:bg-red-600 text-white shadow-red-500/20'
@@ -121,11 +134,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className }) 
       >
         {justAdded ? (
           <>
-            <Check className="w-3.5 h-3.5" />
-            <span>Aggiunto!</span>
+            <Check className="w-4 h-4" />
+            <span>Aggiunto al carrello</span>
           </>
         ) : (
-          <span>Aggiungi al carrello</span>
+          <>
+            <ShoppingBag className="w-4 h-4" />
+            <span>Aggiungi al carrello</span>
+          </>
         )}
       </button>
     </div>

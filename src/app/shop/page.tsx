@@ -18,9 +18,8 @@ const categories = [
   { id: 'all', label: 'Tutti' },
   { id: 'classiche', label: 'Classiche' },
   { id: 'speciali', label: 'Speciali' },
-  { id: 'funzionali', label: 'Funzionali' },
-  { id: 'personalizzate', label: 'Personalizzate' },
   { id: 'eeveelutions', label: 'Eeveelutions' },
+  { id: 'custom', label: 'Custom' },
   { id: 'limited-editions', label: 'Limited' },
 ];
 
@@ -34,10 +33,10 @@ export default function ShopPage() {
       selectedCategory === 'all'
         ? [...productsData]
         : productsData.filter((p) => {
-            if (selectedCategory === 'classiche') return p.category === 'classiche' || p.ballType === 'pokeball';
-            if (selectedCategory === 'speciali') return p.category === 'speciali' || ['greatball', 'ultraball', 'masterball', 'luxuryball'].includes(p.ballType);
-            if (selectedCategory === 'funzionali') return p.category === 'funzionali' || ['lampball', 'holderball'].includes(p.ballType);
-            if (selectedCategory === 'personalizzate') return p.category === 'personalizzate' || p.ballType === 'hellokittyball' || p.category === 'custom';
+            if (selectedCategory === 'classiche') return p.category === 'classiche' || ['pokeball', 'premierball'].includes(p.ballType);
+            if (selectedCategory === 'speciali') return p.category === 'speciali' || ['greatball', 'ultraball', 'masterball', 'luxuryball', 'duskball', 'quickball'].includes(p.ballType);
+            if (selectedCategory === 'eeveelutions') return p.category === 'eeveelutions';
+            if (selectedCategory === 'custom') return p.category === 'custom';
             return p.category === selectedCategory;
           });
 
