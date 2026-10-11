@@ -24,7 +24,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
   } = useUI();
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-zinc-950 selection:bg-zinc-950 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-[#09090b] text-white selection:bg-red-500 selection:text-white antialiased">
       <Navbar />
       <main className="flex-1">{children}</main>
       <Footer />

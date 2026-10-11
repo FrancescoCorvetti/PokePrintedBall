@@ -90,25 +90,25 @@ export default function PokemonListPage() {
   }, [hasPokemon]);
 
   return (
-    <div className="py-10 sm:py-14 bg-white min-h-screen">
+    <div className="py-10 sm:py-14 bg-[#09090b] text-white min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         {/* Page Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-zinc-200">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-zinc-800">
           <div>
-            <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-zinc-950">
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
               Pokémon Collection
             </h1>
-            <p className="text-sm text-zinc-500 mt-1.5 max-w-xl">
+            <p className="text-sm text-zinc-400 mt-1.5 max-w-xl leading-relaxed">
               Discover. Collect. Share. Esplora tutti i {pokemonData.length} Pokémon, gestisci quelli riscattati via NFC e scopri le catture della community.
             </p>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <Button variant="outline" size="sm" onClick={openSearch}>
+            <Button variant="outline" size="sm" onClick={openSearch} className="border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800">
               <Search className="h-3.5 w-3.5" />
               <span>Ricerca Rapida (⌘K)</span>
             </Button>
-            <Button size="sm" onClick={openNFCScan}>
+            <Button size="sm" onClick={openNFCScan} className="bg-red-500 hover:bg-red-600 text-white font-medium">
               <Smartphone className="h-3.5 w-3.5" />
               <span>Scansiona NFC</span>
             </Button>
@@ -118,25 +118,25 @@ export default function PokemonListPage() {
         {/* Main shadcn/ui Tabs */}
         <Tabs defaultValue="explore" className="space-y-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <TabsList>
-              <TabsTrigger value="explore">
+            <TabsList className="bg-[#141419] border border-zinc-800">
+              <TabsTrigger value="explore" className="data-[state=active]:bg-red-500 data-[state=active]:text-white text-zinc-400">
                 Explore ({pokemonData.length})
               </TabsTrigger>
-              <TabsTrigger value="my-collection">
+              <TabsTrigger value="my-collection" className="data-[state=active]:bg-red-500 data-[state=active]:text-white text-zinc-400">
                 My Collection ({uniqueCount})
               </TabsTrigger>
-              <TabsTrigger value="community">
+              <TabsTrigger value="community" className="data-[state=active]:bg-red-500 data-[state=active]:text-white text-zinc-400">
                 Community
               </TabsTrigger>
             </TabsList>
 
-            <div className="flex items-center gap-3 text-xs text-zinc-500">
+            <div className="flex items-center gap-3 text-xs text-zinc-400">
               <span>
-                Posseduti: <strong className="text-zinc-950">{uniqueCount}</strong> / {pokemonData.length}
+                Posseduti: <strong className="text-white">{uniqueCount}</strong> / {pokemonData.length}
               </span>
               <span>&bull;</span>
               <span>
-                Totale sfere NFC: <strong className="text-zinc-950">{totalCatches}</strong>
+                Totale sfere NFC: <strong className="text-white">{totalCatches}</strong>
               </span>
             </div>
           </div>
@@ -153,6 +153,7 @@ export default function PokemonListPage() {
                     setVisibleCount(60);
                   }}
                   placeholder="Filtra per nome o numero (#0025)..."
+                  className="bg-[#141419] border-zinc-800 text-white placeholder:text-zinc-500"
                 />
               </div>
 
@@ -164,10 +165,10 @@ export default function PokemonListPage() {
                     setVisibleCount(60);
                   }}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-[#141419] border-zinc-800 text-white">
                     <SelectValue placeholder="Generazione" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-[#141419] border-zinc-800 text-white">
                     <SelectItem value="all">Tutte le Gen</SelectItem>
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((g) => (
                       <SelectItem key={g} value={String(g)}>
@@ -186,10 +187,10 @@ export default function PokemonListPage() {
                     setVisibleCount(60);
                   }}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-[#141419] border-zinc-800 text-white">
                     <SelectValue placeholder="Tipo" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-[#141419] border-zinc-800 text-white">
                     <SelectItem value="all">Tutti i Tipi</SelectItem>
                     {allTypes.map((t) => (
                       <SelectItem key={t} value={t}>
@@ -208,10 +209,10 @@ export default function PokemonListPage() {
                     setVisibleCount(60);
                   }}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-[#141419] border-zinc-800 text-white">
                     <SelectValue placeholder="Disponibilità Sfera" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-[#141419] border-zinc-800 text-white">
                     <SelectItem value="all">Tutti i Pokémon</SelectItem>
                     <SelectItem value="AVAILABLE">Con Sfera Dedicata</SelectItem>
                   </SelectContent>
@@ -227,20 +228,20 @@ export default function PokemonListPage() {
                     )
                   }
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Ordina" />
+                  <SelectTrigger className="bg-[#141419] border-zinc-800 text-white">
+                    <SelectValue placeholder="Ordina per" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="number-asc">Numero: 0001 &rarr; 1025</SelectItem>
-                    <SelectItem value="number-desc">Numero: 1025 &rarr; 0001</SelectItem>
-                    <SelectItem value="name-asc">Nome: A &rarr; Z</SelectItem>
-                    <SelectItem value="name-desc">Nome: Z &rarr; A</SelectItem>
+                  <SelectContent className="bg-[#141419] border-zinc-800 text-white">
+                    <SelectItem value="number-asc">Pokédex # (1 &rarr; 1025)</SelectItem>
+                    <SelectItem value="number-desc">Pokédex # (1025 &rarr; 1)</SelectItem>
+                    <SelectItem value="name-asc">Nome (A &rarr; Z)</SelectItem>
+                    <SelectItem value="name-desc">Nome (Z &rarr; A)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            <div className="flex items-center justify-between text-xs text-zinc-500">
+            <div className="flex items-center justify-between text-xs text-zinc-400">
               <span>{filteredList.length} Pokémon trovati</span>
               {(searchQuery ||
                 selectedGen !== 'all' ||

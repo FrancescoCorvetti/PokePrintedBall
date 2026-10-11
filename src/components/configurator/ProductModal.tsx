@@ -82,7 +82,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
 
   return (
     <Dialog open={!!product} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-6 sm:p-8">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 bg-[#0c0c10] border-zinc-800 text-white">
         <DialogHeader className="sr-only">
           <DialogTitle>{product.name}</DialogTitle>
           <DialogDescription>{product.subtitle}</DialogDescription>
@@ -98,38 +98,38 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
           <div className="md:col-span-6 space-y-6">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Badge variant="secondary">{product.categoryLabel}</Badge>
-                <span className="flex items-center gap-1.5 text-xs font-medium text-emerald-700">
+                <Badge variant="secondary" className="bg-zinc-800 text-zinc-300 border-0">{product.categoryLabel}</Badge>
+                <span className="flex items-center gap-1.5 text-xs font-medium text-emerald-400">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                   {product.stockStatus === 'in_stock' ? 'Disponibile' : 'Su Ordinazione'}
                 </span>
               </div>
 
-              <h2 className="text-2xl font-bold tracking-tight text-zinc-950">
+              <h2 className="text-2xl font-bold tracking-tight text-white">
                 {product.name}
               </h2>
 
-              <p className="text-sm text-zinc-600 leading-relaxed">
+              <p className="text-sm text-zinc-400 leading-relaxed">
                 {product.subtitle}
               </p>
             </div>
 
             <div className="flex items-baseline gap-3">
-              <span className="text-2xl font-bold text-zinc-950">
+              <span className="text-2xl font-bold text-white">
                 {liveUnitPrice.toFixed(2)}€
               </span>
               {product.originalPrice && (
-                <span className="text-sm text-zinc-400 line-through">
+                <span className="text-sm text-zinc-500 line-through">
                   {product.originalPrice.toFixed(2)}€
                 </span>
               )}
             </div>
 
-            <Separator />
+            <Separator className="bg-zinc-800" />
 
             {product.availableSupports && product.availableSupports.length > 0 && (
               <div className="space-y-2">
-                <label className="text-xs font-semibold uppercase tracking-wider text-zinc-900 block">
+                <label className="text-xs font-semibold uppercase tracking-wider text-zinc-300 block">
                   Supporto Espositivo
                 </label>
                 <div className="grid grid-cols-1 gap-2">
@@ -143,8 +143,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
                         className={cn(
                           'p-3 rounded-lg border text-left flex items-center justify-between transition-colors cursor-pointer text-xs',
                           isSel
-                            ? 'border-zinc-950 bg-zinc-50 text-zinc-950 font-semibold'
-                            : 'border-zinc-200 hover:border-zinc-300 text-zinc-600'
+                            ? 'border-red-500 bg-red-500/10 text-white font-semibold'
+                            : 'border-zinc-800 hover:border-zinc-700 bg-zinc-900/50 text-zinc-400 hover:text-white'
                         )}
                       >
                         <span>{supp.name}</span>
@@ -161,7 +161,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
             {product.allowCustomEngraving && (
               <div className="space-y-2">
                 <div className="flex justify-between items-center text-xs">
-                  <label htmlFor="modal-engraving" className="font-semibold uppercase tracking-wider text-zinc-900">
+                  <label htmlFor="modal-engraving" className="font-semibold uppercase tracking-wider text-zinc-300">
                     Incisione Targa
                   </label>
                   <span className="text-zinc-500">Inclusa</span>
@@ -173,27 +173,27 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
                   value={customEngraving}
                   onChange={(e) => setCustomEngraving(e.target.value)}
                   placeholder="Es. NOME ALLENATORE"
-                  className="font-mono uppercase text-xs"
+                  className="font-mono uppercase text-xs bg-zinc-900 border-zinc-800 text-white"
                 />
               </div>
             )}
 
             <div className="flex items-center gap-3 pt-2">
-              <div className="flex items-center border border-zinc-200 rounded-md h-11 px-1 bg-white shrink-0">
+              <div className="flex items-center border border-zinc-800 rounded-md h-11 px-1 bg-zinc-900 shrink-0">
                 <button
                   type="button"
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-8 h-8 flex items-center justify-center text-zinc-600 hover:text-zinc-950 cursor-pointer"
+                  className="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-white cursor-pointer"
                 >
                   <Minus className="w-3.5 h-3.5" />
                 </button>
-                <span className="w-8 text-center text-sm font-semibold text-zinc-950">
+                <span className="w-8 text-center text-sm font-semibold text-white">
                   {quantity}
                 </span>
                 <button
                   type="button"
                   onClick={() => setQuantity(quantity + 1)}
-                  className="w-8 h-8 flex items-center justify-center text-zinc-600 hover:text-zinc-950 cursor-pointer"
+                  className="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-white cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                 </button>
@@ -202,7 +202,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
               <Button
                 onClick={handleAddToCart}
                 size="lg"
-                className="flex-1 h-11 gap-2"
+                className="flex-1 h-11 gap-2 bg-red-500 hover:bg-red-600 text-white font-semibold"
               >
                 {added ? (
                   <>
@@ -221,18 +221,18 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
                 variant="outline"
                 size="icon"
                 onClick={() => toggleWishlist(product.id)}
-                className={cn('h-11 w-11 shrink-0', isFavorited && 'text-red-600 border-red-200 bg-red-50')}
+                className={cn('h-11 w-11 shrink-0 border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800', isFavorited && 'text-red-500 border-red-500/40 bg-red-500/10')}
               >
-                <Heart className={cn('w-4 h-4', isFavorited && 'fill-red-600')} />
+                <Heart className={cn('w-4 h-4', isFavorited && 'fill-red-500 text-red-500')} />
               </Button>
             </div>
 
-            <div className="pt-2 border-t border-zinc-100 flex items-center justify-between text-xs text-zinc-500">
+            <div className="pt-2 border-t border-zinc-800 flex items-center justify-between text-xs text-zinc-400">
               <span>Layer {product.specs.layerHeight} &bull; {product.specs.diameter}</span>
               <Link
                 href={`/shop/${product.slug}`}
                 onClick={onClose}
-                className="font-medium text-zinc-950 hover:underline inline-flex items-center gap-1"
+                className="font-medium text-white hover:underline inline-flex items-center gap-1"
               >
                 Scheda prodotto completa
                 <ArrowUpRight className="w-3.5 h-3.5" />

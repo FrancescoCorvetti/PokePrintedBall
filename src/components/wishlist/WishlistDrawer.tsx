@@ -35,8 +35,17 @@ export const WishlistDrawer: React.FC<WishlistDrawerProps> = ({ products }) => {
 
   const handleMoveToCart = (product: Product) => {
     addItem(product, {
-      selectedSupport: product.availableSupports[0],
-      selectedFinish: product.availableFinishes[0],
+      selectedSupport: product.availableSupports?.[0] || {
+        id: 'default',
+        name: 'Stand da Esposizione Incluso',
+        price: 0,
+        description: 'Supporto per scrivania',
+      },
+      selectedFinish: product.availableFinishes?.[0] || {
+        id: 'matte',
+        name: 'FDM Satin Finish',
+        description: 'Superficie satinata',
+      },
     });
     toggleWishlist(product.id);
     closeWishlist();
@@ -48,72 +57,75 @@ export const WishlistDrawer: React.FC<WishlistDrawerProps> = ({ products }) => {
       open={isWishlistOpen}
       onOpenChange={(open) => !open && closeWishlist()}
     >
-      <SheetContent side="right" className="flex flex-col p-0 sm:max-w-md">
-        <SheetHeader className="px-6 py-4 border-b border-zinc-200">
+      <SheetContent side="right" className="flex flex-col p-0 sm:max-w-md bg-[#0c0c10] border-zinc-800 text-white">
+        <SheetHeader className="px-6 py-4 border-b border-zinc-800">
           <div className="flex items-center gap-2">
-            <Heart className="h-4 w-4 text-zinc-900" />
-            <SheetTitle>Preferiti</SheetTitle>
-            <Badge variant="secondary">{wishlistCount}</Badge>
+            <Heart className="h-4 w-4 text-red-500 fill-red-500" />
+            <SheetTitle className="text-white">Preferiti</SheetTitle>
+            <Badge variant="secondary" className="bg-zinc-800 text-zinc-300 border-0">{wishlistCount}</Badge>
           </div>
         </SheetHeader>
 
-        <div className="flex-1 overflow-y-auto px-6 py-4 divide-y divide-zinc-200">
+        <div className="flex-1 overflow-y-auto px-6 py-4 divide-y divide-zinc-800/80">
           {wishlistProducts.length === 0 ? (
             <div className="py-20 text-center space-y-3">
-              <p className="text-sm font-medium text-zinc-900">
-                Nessun prodotto salvato
+              <p className="text-sm font-medium text-white">
+                Nessun articolo salvato
               </p>
               <p className="text-xs text-zinc-500 max-w-xs mx-auto">
-                Salva le tue Poké Ball preferite cliccando sull&apos;icona del cuore.
+                Clicca sul cuore per salvare le tue Poké Ball preferite e ritrovarle qui.
               </p>
+              <div className="pt-2">
+                <Button variant="outline" size="sm" onClick={closeWishlist} asChild className="border-zinc-700 text-white hover:bg-zinc-800">
+                  <Link href="/shop">Esplora lo Shop</Link>
+                </Button>
+              </div>
             </div>
           ) : (
-            wishlistProducts.map((prod) => (
-              <div
-                key={prod.id}
-                className="py-4 flex items-center justify-between gap-4"
-              >
+            wishlistProducts.map((product) => (
+              <div key={product.id} className="py-4 flex gap-4 items-center">
                 <Link
-                  href={`/shop/${prod.slug}`}
+                  href={`/shop/${product.slug}`}
                   onClick={closeWishlist}
-                  className="flex items-center gap-3 min-w-0"
+                  className="h-16 w-16 rounded-md overflow-hidden border border-zinc-800 bg-black/50 shrink-0"
                 >
-                  <div className="h-14 w-14 rounded-md overflow-hidden border border-zinc-200 bg-zinc-100 shrink-0">
-                    <StudioPokeballGraphic
-                      type={prod.ballType}
-                      customColors={prod.customColors}
-                      fill
-                    />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-zinc-950 hover:underline truncate">
-                      {prod.name}
-                    </p>
-                    <p className="text-xs font-semibold text-zinc-600 mt-0.5">
-                      {prod.price.toFixed(2)}€
-                    </p>
-                  </div>
+                  <StudioPokeballGraphic
+                    type={product.ballType}
+                    customColors={product.customColors}
+                    fill
+                  />
                 </Link>
 
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <Button
-                    type="button"
-                    size="icon"
-                    variant="outline"
-                    onClick={() => handleMoveToCart(prod)}
-                    title="Aggiungi al carrello"
+                <div className="flex-1 min-w-0 space-y-1">
+                  <Link
+                    href={`/shop/${product.slug}`}
+                    onClick={closeWishlist}
+                    className="text-sm font-medium text-white hover:text-red-400 transition-colors truncate block"
                   >
-                    <ShoppingBag className="h-4 w-4" />
-                  </Button>
+                    {product.name}
+                  </Link>
+                  <p className="text-xs font-semibold text-white">
+                    {product.price.toFixed(2)}€
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
                   <Button
-                    type="button"
-                    size="icon"
-                    variant="ghost"
-                    onClick={() => toggleWishlist(prod.id)}
-                    title="Rimuovi"
+                    size="sm"
+                    onClick={() => handleMoveToCart(product)}
+                    className="gap-1.5 h-8 px-3 text-xs bg-red-500 hover:bg-red-600 text-white font-medium"
                   >
-                    <Trash2 className="h-4 w-4 text-zinc-500" />
+                    <ShoppingBag className="h-3.5 w-3.5" />
+                    <span>Carrello</span>
                   </Button>
+                  <button
+                    type="button"
+                    onClick={() => toggleWishlist(product.id)}
+                    className="text-zinc-500 hover:text-red-400 p-1.5 cursor-pointer transition-colors"
+                    aria-label="Rimuovi dai preferiti"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
                 </div>
               </div>
             ))

@@ -53,6 +53,12 @@ export function resolveBallImage(
       return '/products/ultraball.jpg';
     case 'masterball':
       return '/products/masterball.jpg';
+    case 'lampball':
+      return '/products/lampball.jpg';
+    case 'holderball':
+      return '/products/holderball.jpg';
+    case 'hellokittyball':
+      return '/products/hellokittyball.jpg';
     case 'premierball':
       return '/products/premierball.jpg';
     case 'duskball':

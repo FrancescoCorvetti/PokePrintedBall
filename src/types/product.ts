@@ -1,4 +1,8 @@
 export type ProductCategory = 
+  | 'classiche'
+  | 'speciali'
+  | 'funzionali'
+  | 'personalizzate'
   | 'pokeballs' 
   | 'eeveelutions'
   | 'special-balls' 
@@ -11,6 +15,9 @@ export type BallType =
   | 'greatball' 
   | 'ultraball' 
   | 'masterball' 
+  | 'lampball'
+  | 'holderball'
+  | 'hellokittyball'
   | 'premierball' 
   | 'duskball' 
   | 'luxuryball' 
