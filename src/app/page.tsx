@@ -23,28 +23,21 @@ export default function HomePage() {
   const [pokemonSearchQuery, setPokemonSearchQuery] = useState('');
   const [activeCustomColor, setActiveCustomColor] = useState('red');
 
-  // Featured 8 authentic Poké Balls
-  const featuredCoreSlugs = [
-    'classic-mk4',
-    'tactical-great-stash',
-    'volt-vault-switch',
-    'master-artifact-led',
-    'luxury-onyx-gold-drop',
-    'premier-ceremonial-box',
-    'nocturnal-bio-glow',
-    'aero-quick-surge',
-  ];
-
-  const eeveelutionSlugs = [
-    'eevee-evolution-ball',
-    'umbreon-night-ball',
-    'sylveon-ribbon-ball',
-    'jolteon-thunder-ball',
+  // Featured 8 demonstration products from Prompt Table
+  const featuredProductSlugs = [
+    'classic-mk4',            // Poké Ball Classica (€24,90)
+    'tactical-great-stash',   // Great Ball (€26,90)
+    'volt-vault-switch',      // Ultra Ball (€26,90)
+    'master-artifact-led',    // Master Ball (€29,90)
+    'pokeball-lampada',       // Poké Ball Lampada (€34,90)
+    'pokeball-porta-oggetti', // Poké Ball Porta Oggetti (€27,90)
+    'luxury-onyx-gold-drop',  // Luxury Ball (€32,90)
+    'studio-custom-ball',     // Poké Ball Personalizzata (€29,90)
   ];
 
   const getFilteredProducts = () => {
     if (selectedCategory === 'Tutti') {
-      return featuredCoreSlugs
+      return featuredProductSlugs
         .map((s) => productsData.find((p) => p.slug === s || p.id === s))
         .filter(Boolean) as typeof productsData;
     }
@@ -62,45 +55,50 @@ export default function HomePage() {
           'luxury-onyx-gold-drop',
           'nocturnal-bio-glow',
           'aero-quick-surge',
-        ].includes(p.slug)
+        ].includes(p.slug) || p.category === 'speciali'
       );
     }
-    if (selectedCategory === 'Eeveelutions') {
-      return eeveelutionSlugs
-        .map((s) => productsData.find((p) => p.slug === s || p.id === s))
-        .filter(Boolean) as typeof productsData;
+    if (selectedCategory === 'Funzionali') {
+      return productsData.filter((p) =>
+        ['pokeball-lampada', 'pokeball-porta-oggetti'].includes(p.slug) || p.category === 'funzionali'
+      );
+    }
+    if (selectedCategory === 'Personalizzate') {
+      return productsData.filter((p) =>
+        ['studio-custom-ball', 'cyber-glitch-prototype'].includes(p.slug) || p.category === 'personalizzate' || p.category === 'custom'
+      );
     }
     return productsData.slice(0, 8);
   };
 
   const displayedProducts = getFilteredProducts();
 
-  // 4 Core Authentic Categories with Dedicated Artwork
+  // 4 Core Categories as requested in Prompt Section 5
   const categories = [
     {
       title: 'Poké Ball Classiche',
-      subtitle: 'I modelli iconici: Classica e Premier Ball in scala reale 1:1',
+      subtitle: 'Modelli originali e varianti iconiche.',
       href: '/shop?category=classiche',
       image: '/products/pokeball.jpg',
-      badge: 'Iconiche 1:1',
+      badge: 'Iconiche',
     },
     {
       title: 'Poké Ball Speciali',
-      subtitle: 'Great, Ultra, Master, Luxury, Dusk e Quick Ball con magneti N52',
+      subtitle: 'Great Ball, Ultra Ball, Master Ball e altre varianti.',
       href: '/shop?category=speciali',
       image: '/products/masterball.jpg',
-      badge: '6 Modelli',
+      badge: 'Speciali',
     },
     {
-      title: 'Eeveelutions Series',
-      subtitle: '9 sfere esclusive dedicate a Eevee e tutte le sue evoluzioni',
-      href: '/shop?category=eeveelutions',
-      image: '/products/umbreonball.jpg',
-      badge: '9 Evoluzioni',
+      title: 'Poké Ball Funzionali',
+      subtitle: 'Lampade, contenitori e accessori.',
+      href: '/shop?category=funzionali',
+      image: '/products/lampball.jpg',
+      badge: 'Funzionali',
     },
     {
-      title: 'Custom Studio Lab',
-      subtitle: 'Configura calotta bicolore, anello e incisione personalizzata',
+      title: 'Poké Ball Personalizzate',
+      subtitle: 'Crea una versione unica.',
       href: '/custom',
       image: '/products/customball.jpg',
       badge: 'Configuratore',
@@ -242,7 +240,7 @@ export default function HomePage() {
             <div className="flex items-center gap-3 overflow-x-auto pb-1 sm:pb-0">
               {/* Category Pills */}
               <div className="flex items-center bg-[#141419] border border-zinc-800 p-1 rounded-full text-xs shrink-0">
-                {['Tutti', 'Classiche', 'Speciali', 'Eeveelutions'].map((cat) => (
+                {['Tutti', 'Classiche', 'Speciali', 'Funzionali', 'Personalizzate'].map((cat) => (
                   <button
                     key={cat}
                     type="button"

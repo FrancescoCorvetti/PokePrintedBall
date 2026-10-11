@@ -33,7 +33,7 @@ export const Navbar: React.FC = () => {
     { label: 'Home', href: '/' },
     { label: 'Prodotti', href: '/shop' },
     { label: 'Lista Pokémon', href: '/pokemon' },
-    { label: 'Personalizzazioni', href: '/custom' },
+    { label: 'Personalizzazione', href: '/custom' },
     { label: 'Community', href: '/pokemon?tab=community' },
     { label: 'Chi siamo', href: '/about' },
   ];

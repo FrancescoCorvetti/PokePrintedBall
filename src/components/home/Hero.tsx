@@ -19,8 +19,8 @@ export const Hero: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: Heading, Subtitle & Buttons */}
           <div className="lg:col-span-6 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-500/40 bg-red-500/10 text-red-400 font-mono text-[11px] font-semibold tracking-wider">
-              <span>STAMPA 3D &bull; SCALA 1:1 REALE &bull; MAGNETI N52</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-red-500/40 bg-red-500/10 text-red-400 font-mono text-[11px] font-semibold tracking-wider">
+              <span>STAMPA 3D &bull; DESIGN UNICO &bull; PER VERI FAN</span>
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.08]">
@@ -28,9 +28,7 @@ export const Hero: React.FC = () => {
             </h1>
 
             <p className="text-sm sm:text-base text-zinc-400 max-w-xl leading-relaxed">
-              Oggetti unici e da collezione stampati in 3D con precisione artigianale.
-              <br className="hidden sm:inline" />
-              Repliche fisiche in scala 1:1 con chiusura magnetica al neodimio N52, texture FDM satinata e tag NFC crittografico integrato.
+              Oggetti unici, funzionali e da collezione. Scopri le nostre Poké Ball stampate in 3D, con design esclusivi, versioni speciali e funzionalità uniche.
             </p>
 
             <div className="flex flex-wrap items-center gap-3.5 pt-2">
@@ -85,10 +83,10 @@ export const Hero: React.FC = () => {
             </div>
             <div className="space-y-0.5 min-w-0">
               <h4 className="text-xs sm:text-sm font-bold text-white truncate">
-                Stampa 3D di Precisione
+                Stampa 3D di alta qualità
               </h4>
               <p className="text-[11px] sm:text-xs text-zinc-400 leading-snug">
-                Layer ultra-fini da 0.16mm e PLA+ biologico
+                Materiali resistenti e dettagli curati.
               </p>
             </div>
           </div>
@@ -100,10 +98,10 @@ export const Hero: React.FC = () => {
             </div>
             <div className="space-y-0.5 min-w-0">
               <h4 className="text-xs sm:text-sm font-bold text-white truncate">
-                Chiusura Magnetica N52
+                Design unici e funzionali
               </h4>
               <p className="text-[11px] sm:text-xs text-zinc-400 leading-snug">
-                Scatto solido con magneti al neodimio
+                Da collezione o per uso quotidiano.
               </p>
             </div>
           </div>
@@ -115,10 +113,10 @@ export const Hero: React.FC = () => {
             </div>
             <div className="space-y-0.5 min-w-0">
               <h4 className="text-xs sm:text-sm font-bold text-white truncate">
-                Chip NFC Integrato
+                Perfette come regalo
               </h4>
               <p className="text-[11px] sm:text-xs text-zinc-400 leading-snug">
-                Riscatta il tuo Pokémon nell&apos;album digitale
+                Per gli appassionati di Pokémon.
               </p>
             </div>
           </div>
@@ -130,10 +128,10 @@ export const Hero: React.FC = () => {
             </div>
             <div className="space-y-0.5 min-w-0">
               <h4 className="text-xs sm:text-sm font-bold text-white truncate">
-                Spedizione Tracciata
+                Spedizione in tutta Italia
               </h4>
               <p className="text-[11px] sm:text-xs text-zinc-400 leading-snug">
-                Consegna rapida in Italia con box antiurto
+                Informazioni chiare e tracciamento.
               </p>
             </div>
           </div>

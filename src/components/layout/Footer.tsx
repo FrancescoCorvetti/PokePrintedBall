@@ -115,6 +115,11 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link href="/shipping" className="hover:text-white transition-colors">
+                  Spedizioni e Resi
+                </Link>
+              </li>
+              <li>
                 <Link href="/contact" className="hover:text-white transition-colors">
                   Contattaci
                 </Link>
@@ -123,10 +128,24 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Copyright */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
-          <span>&copy; {new Date().getFullYear()} Poke3D. Tutti i diritti riservati.</span>
-          <span>Stampa 3D FDM artigianale ad alta risoluzione.</span>
+        {/* Bottom Legal Links & Copyright */}
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <span>&copy; {new Date().getFullYear()} Poke3D. Tutti i diritti riservati.</span>
+            <Link href="/privacy" className="hover:text-zinc-300 transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="hover:text-zinc-300 transition-colors">
+              Termini e Condizioni
+            </Link>
+            <Link href="/cookies" className="hover:text-zinc-300 transition-colors">
+              Cookie Policy
+            </Link>
+            <Link href="/admin" className="text-zinc-600 hover:text-zinc-400 transition-colors font-mono">
+              Admin Lab
+            </Link>
+          </div>
+          <span className="text-[11px] text-zinc-500">Stampa 3D FDM artigianale in scala reale 1:1</span>
         </div>
       </div>
     </footer>

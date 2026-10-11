@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Check } from 'lucide-react';
+import { Check, Mail, Clock, Truck, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -28,144 +28,145 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="py-10 sm:py-14 bg-white min-h-screen">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-        <div className="pb-6 border-b border-zinc-200 space-y-1.5">
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-zinc-950">
-            Contatti
+    <div className="py-10 sm:py-16 bg-[#09090b] text-white min-h-screen">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div className="pb-6 border-b border-zinc-800 space-y-2">
+          <span className="text-[11px] font-mono uppercase text-red-400 font-bold tracking-wider">
+            SUPPORTO &bull; CONTATTI
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+            Mettiti in contatto con noi
           </h1>
-          <p className="text-sm text-zinc-500">
-            Scrivici per richieste personalizzate, informazioni sugli ordini o domande sui modelli stampati in 3D.
+          <p className="text-sm text-zinc-400 max-w-xl">
+            Scrivici per richieste personalizzate, informazioni sullo stato degli ordini o domande tecniche sui modelli stampati in 3D.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
-          {/* Contact Info */}
-          <div className="md:col-span-5 space-y-6 text-sm">
-            <div>
-              <h2 className="font-semibold text-zinc-950">Email</h2>
-              <p className="text-zinc-600 mt-1">info@poke3d.it</p>
+          {/* Contact Info (5 cols) */}
+          <div className="md:col-span-5 space-y-6">
+            <div className="p-5 rounded-2xl bg-[#121217] border border-zinc-800 space-y-2">
+              <div className="flex items-center gap-2.5 text-red-400">
+                <Mail className="w-4 h-4" />
+                <h3 className="font-bold text-white text-sm">Email di Supporto</h3>
+              </div>
+              <p className="text-xs text-zinc-400">info@poke3d.it</p>
+              <p className="text-[11px] text-zinc-500">Rispondiamo generalmente entro 24 ore lavorative.</p>
             </div>
 
-            <div>
-              <h2 className="font-semibold text-zinc-950">Orari Laboratorio</h2>
-              <p className="text-zinc-600 mt-1">Lun &ndash; Ven: 09:00 &ndash; 19:00</p>
+            <div className="p-5 rounded-2xl bg-[#121217] border border-zinc-800 space-y-2">
+              <div className="flex items-center gap-2.5 text-red-400">
+                <Clock className="w-4 h-4" />
+                <h3 className="font-bold text-white text-sm">Orari Laboratorio</h3>
+              </div>
+              <p className="text-xs text-zinc-400">Lunedì &ndash; Venerdì: 09:00 &ndash; 18:30</p>
+              <p className="text-[11px] text-zinc-500">Stampa e assemblaggio attivo nei giorni feriali.</p>
             </div>
 
-            <div>
-              <h2 className="font-semibold text-zinc-950">Spedizioni</h2>
-              <p className="text-zinc-600 mt-1">
-                Corriere espresso tracciato 24/48h in tutta Italia. Gratuita sopra i 40€.
-              </p>
+            <div className="p-5 rounded-2xl bg-[#121217] border border-zinc-800 space-y-2">
+              <div className="flex items-center gap-2.5 text-red-400">
+                <Truck className="w-4 h-4" />
+                <h3 className="font-bold text-white text-sm">Spedizioni</h3>
+              </div>
+              <p className="text-xs text-zinc-400">Corriere espresso tracciato 24/48h in tutta Italia.</p>
+              <p className="text-[11px] text-zinc-500">Spedizione gratuita per ordini superiori a 49€.</p>
             </div>
           </div>
 
-          {/* Contact Form */}
-          <div className="md:col-span-7">
+          {/* Form (7 cols) */}
+          <div className="md:col-span-7 bg-[#121217] border border-zinc-800 rounded-2xl p-6 sm:p-8">
             {submitted ? (
-              <div className="rounded-lg border border-zinc-200 p-8 text-center space-y-3">
-                <div className="h-10 w-10 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center mx-auto">
-                  <Check className="h-5 w-5" />
+              <div className="text-center py-12 space-y-3">
+                <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center mx-auto">
+                  <Check className="w-6 h-6" />
                 </div>
-                <h3 className="text-base font-semibold text-zinc-950">
-                  Messaggio inviato
-                </h3>
-                <p className="text-xs text-zinc-500 max-w-sm mx-auto">
-                  Grazie {formData.name}, ti risponderemo all&apos;indirizzo {formData.email} il prima possibile.
+                <h2 className="text-lg font-bold text-white">Messaggio inviato con successo!</h2>
+                <p className="text-xs text-zinc-400 max-w-sm mx-auto">
+                  Grazie per averci contattato. Abbiamo ricevuto la tua richiesta e ti risponderemo all&apos;indirizzo {formData.email}.
                 </p>
                 <Button
+                  type="button"
                   variant="outline"
                   size="sm"
                   onClick={() => {
                     setSubmitted(false);
-                    setFormData({
-                      name: '',
-                      email: '',
-                      subject: 'custom_order',
-                      message: '',
-                    });
+                    setFormData({ name: '', email: '', subject: 'custom_order', message: '' });
                   }}
+                  className="border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-full mt-4"
                 >
                   Invia un altro messaggio
                 </Button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-medium text-zinc-700">
-                      Nome
-                    </label>
-                    <Input
-                      required
-                      value={formData.name}
-                      onChange={(e) =>
-                        setFormData({ ...formData, name: e.target.value })
-                      }
-                      placeholder="Il tuo nome"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-medium text-zinc-700">
-                      Email
-                    </label>
-                    <Input
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) =>
-                        setFormData({ ...formData, email: e.target.value })
-                      }
-                      placeholder="nome@esempio.it"
-                    />
-                  </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-zinc-300 block">
+                    Nome e Cognome
+                  </label>
+                  <Input
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="Mario Rossi"
+                    className="bg-[#181820] border-zinc-800 text-white placeholder:text-zinc-500 text-xs h-10"
+                  />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-zinc-700">
-                    Oggetto
+                  <label className="text-xs font-semibold text-zinc-300 block">
+                    Indirizzo Email
+                  </label>
+                  <Input
+                    required
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="mario.rossi@email.it"
+                    className="bg-[#181820] border-zinc-800 text-white placeholder:text-zinc-500 text-xs h-10"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-zinc-300 block">
+                    Motivo del contatto
                   </label>
                   <Select
                     value={formData.subject}
-                    onValueChange={(v) =>
-                      setFormData({ ...formData, subject: v })
-                    }
+                    onValueChange={(val) => setFormData({ ...formData, subject: val })}
                   >
-                    <SelectTrigger className="h-10 text-sm">
-                      <SelectValue />
+                    <SelectTrigger className="w-full h-10 text-xs bg-[#181820] border-zinc-800 text-white">
+                      <SelectValue placeholder="Seleziona oggetto" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="custom_order" className="text-sm">
-                        Richiesta Poké Ball Personalizzata
-                      </SelectItem>
-                      <SelectItem value="order_tracking" className="text-sm">
-                        Informazioni su un Ordine
-                      </SelectItem>
-                      <SelectItem value="other" className="text-sm">
-                        Altre Informazioni
-                      </SelectItem>
+                    <SelectContent className="bg-[#181820] border-zinc-800 text-white">
+                      <SelectItem value="custom_order" className="text-xs text-zinc-300">Richiesta Poké Ball Custom</SelectItem>
+                      <SelectItem value="order_status" className="text-xs text-zinc-300">Stato di un Ordine Esistente</SelectItem>
+                      <SelectItem value="nfc_claim" className="text-xs text-zinc-300">Assistenza Scansione Tag NFC</SelectItem>
+                      <SelectItem value="b2b" className="text-xs text-zinc-300">Richiesta Commerciale / Eventi</SelectItem>
+                      <SelectItem value="other" className="text-xs text-zinc-300">Altro</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-zinc-700">
+                  <label className="text-xs font-semibold text-zinc-300 block">
                     Messaggio
                   </label>
                   <textarea
                     required
-                    rows={5}
+                    rows={4}
                     value={formData.message}
-                    onChange={(e) =>
-                      setFormData({ ...formData, message: e.target.value })
-                    }
-                    placeholder="Scrivi qui il tuo messaggio..."
-                    className="flex w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-950 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950"
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    placeholder="Descrivi la tua richiesta in dettaglio..."
+                    className="w-full rounded-md border border-zinc-800 bg-[#181820] p-3 text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-red-500 transition-colors"
                   />
                 </div>
 
-                <Button type="submit" className="w-full sm:w-auto">
-                  Invia Messaggio
+                <Button
+                  type="submit"
+                  className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold text-xs tracking-wide py-2.5 rounded-full cursor-pointer shadow-lg shadow-red-500/25"
+                >
+                  <Send className="w-3.5 h-3.5 mr-2" />
+                  <span>Invia Richiesta</span>
                 </Button>
               </form>
             )}

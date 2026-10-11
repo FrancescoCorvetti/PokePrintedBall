@@ -26,7 +26,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ product }) => {
   return (
     <div className="flex flex-col gap-4">
       {/* Main Product Image */}
-      <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-zinc-100 border border-zinc-200">
+      <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-zinc-950 border border-zinc-800 shadow-xl">
         <StudioPokeballGraphic
           type={product.ballType}
           customColors={product.customColors}
@@ -45,10 +45,10 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ product }) => {
               type="button"
               onClick={() => setActiveIndex(idx)}
               className={cn(
-                'group relative aspect-square overflow-hidden rounded-md bg-zinc-100 border transition-all cursor-pointer',
+                'group relative aspect-square overflow-hidden rounded-xl bg-zinc-950 border transition-all cursor-pointer',
                 isSelected
-                  ? 'border-zinc-950 ring-1 ring-zinc-950'
-                  : 'border-zinc-200 opacity-75 hover:opacity-100'
+                  ? 'border-red-500 ring-2 ring-red-500/40 opacity-100 scale-102'
+                  : 'border-zinc-800/80 opacity-60 hover:opacity-100 hover:border-zinc-700'
               )}
             >
               <StudioPokeballGraphic
