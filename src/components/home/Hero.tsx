@@ -77,15 +77,15 @@ export const Hero: React.FC = () => {
         </div>
 
         {/* Feature Value Proposition Bar (4 Items) */}
-        <div className="pt-8 border-t border-zinc-800/80 grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        <div className="pt-8 border-t border-zinc-800/80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {/* Feature 1 */}
-          <div className="flex items-start gap-3.5">
+          <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-[#121217]/70 border border-zinc-800/80">
             <div className="p-2.5 rounded-xl bg-red-500/10 text-red-500 shrink-0 mt-0.5 border border-red-500/20">
-              <Box className="w-5 h-5" />
+              <Box className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <div className="space-y-0.5">
-              <h4 className="text-xs sm:text-sm font-bold text-white">
-                Stampa 3D ad alta precisione
+            <div className="space-y-0.5 min-w-0">
+              <h4 className="text-xs sm:text-sm font-bold text-white truncate">
+                Stampa 3D di Precisione
               </h4>
               <p className="text-[11px] sm:text-xs text-zinc-400 leading-snug">
                 Layer ultra-fini da 0.16mm e PLA+ biologico
@@ -94,46 +94,46 @@ export const Hero: React.FC = () => {
           </div>
 
           {/* Feature 2 */}
-          <div className="flex items-start gap-3.5">
+          <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-[#121217]/70 border border-zinc-800/80">
             <div className="p-2.5 rounded-xl bg-red-500/10 text-red-500 shrink-0 mt-0.5 border border-red-500/20">
-              <Layers className="w-5 h-5" />
+              <Layers className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <div className="space-y-0.5">
-              <h4 className="text-xs sm:text-sm font-bold text-white">
-                Chiusura con magneti N52
+            <div className="space-y-0.5 min-w-0">
+              <h4 className="text-xs sm:text-sm font-bold text-white truncate">
+                Chiusura Magnetica N52
               </h4>
               <p className="text-[11px] sm:text-xs text-zinc-400 leading-snug">
-                Scatto solido e magneti al neodimio incastonati
+                Scatto solido con magneti al neodimio
               </p>
             </div>
           </div>
 
           {/* Feature 3 */}
-          <div className="flex items-start gap-3.5">
+          <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-[#121217]/70 border border-zinc-800/80">
             <div className="p-2.5 rounded-xl bg-red-500/10 text-red-500 shrink-0 mt-0.5 border border-red-500/20">
-              <Smartphone className="w-5 h-5" />
+              <Smartphone className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <div className="space-y-0.5">
-              <h4 className="text-xs sm:text-sm font-bold text-white">
-                Chip NFC Digitale Integrato
+            <div className="space-y-0.5 min-w-0">
+              <h4 className="text-xs sm:text-sm font-bold text-white truncate">
+                Chip NFC Integrato
               </h4>
               <p className="text-[11px] sm:text-xs text-zinc-400 leading-snug">
-                Riscatta il tuo Pokémon nell&apos;album personale
+                Riscatta il tuo Pokémon nell&apos;album digitale
               </p>
             </div>
           </div>
 
           {/* Feature 4 */}
-          <div className="flex items-start gap-3.5">
+          <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-[#121217]/70 border border-zinc-800/80">
             <div className="p-2.5 rounded-xl bg-red-500/10 text-red-500 shrink-0 mt-0.5 border border-red-500/20">
-              <Truck className="w-5 h-5" />
+              <Truck className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <div className="space-y-0.5">
-              <h4 className="text-xs sm:text-sm font-bold text-white">
-                Spedizione tracciata in Italia
+            <div className="space-y-0.5 min-w-0">
+              <h4 className="text-xs sm:text-sm font-bold text-white truncate">
+                Spedizione Tracciata
               </h4>
               <p className="text-[11px] sm:text-xs text-zinc-400 leading-snug">
-                Spedizioni sicure con imballaggio protettivo
+                Consegna rapida in Italia con box antiurto
               </p>
             </div>
           </div>

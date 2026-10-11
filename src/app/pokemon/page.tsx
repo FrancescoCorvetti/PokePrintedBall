@@ -285,35 +285,35 @@ export default function PokemonListPage() {
 
           {/* TAB 2: MY COLLECTION */}
           <TabsContent value="my-collection" className="space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-800">
               <div>
-                <h2 className="text-lg font-semibold text-zinc-950">
+                <h2 className="text-xl font-extrabold text-white tracking-tight">
                   I Tuoi Pokémon Riscattati ({uniqueCount})
                 </h2>
-                <p className="text-xs text-zinc-500 mt-0.5">
+                <p className="text-xs text-zinc-400 mt-1">
                   Creature sbloccate tramite il chip NFC integrato nelle tue Poké Ball POKE3D.
                 </p>
               </div>
 
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" asChild>
+                <Button variant="outline" size="sm" asChild className="border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800">
                   <Link href="/collection">Apri Album Completo</Link>
                 </Button>
-                <Button size="sm" onClick={openNFCScan}>
+                <Button size="sm" onClick={openNFCScan} className="bg-red-500 hover:bg-red-600 text-white">
                   Riscatta Codice NFC
                 </Button>
               </div>
             </div>
 
             {userCaughtPokemon.length === 0 ? (
-              <div className="py-16 text-center border border-dashed border-zinc-200 rounded-lg space-y-3">
-                <p className="text-sm font-medium text-zinc-900">
+              <div className="py-16 text-center border border-dashed border-zinc-800 rounded-2xl bg-[#121217]/60 space-y-3">
+                <p className="text-sm font-semibold text-white">
                   Non hai ancora riscattato nessun Pokémon
                 </p>
-                <p className="text-xs text-zinc-500 max-w-sm mx-auto">
+                <p className="text-xs text-zinc-400 max-w-sm mx-auto">
                   Scansiona il tag NFC della tua Poké Ball fisica per aggiungere il primo Pokémon alla tua collezione.
                 </p>
-                <Button size="sm" onClick={openNFCScan}>
+                <Button size="sm" onClick={openNFCScan} className="bg-red-500 hover:bg-red-600 text-white mt-2">
                   Prova Scansione NFC
                 </Button>
               </div>
